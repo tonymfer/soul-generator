@@ -232,3 +232,98 @@ body {
     rgba(251, 191, 36, 0.1)
   );
 }
+
+/* ============================================
+   Custom Trait Slider (pixel-styled range input)
+   ============================================ */
+
+.trait-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Track */
+.trait-slider::-webkit-slider-runnable-track {
+  height: 12px;
+  background: linear-gradient(
+    to right,
+    var(--accent-primary) 0%,
+    var(--accent-primary) var(--slider-fill, 50%),
+    var(--card-bg) var(--slider-fill, 50%),
+    var(--card-bg) 100%
+  );
+  box-shadow: 0 0 0 1.5px var(--text-primary), 0 2px 0 0 var(--text-primary);
+  image-rendering: pixelated;
+}
+
+.trait-slider::-moz-range-track {
+  height: 12px;
+  background: var(--card-bg);
+  box-shadow: 0 0 0 1.5px var(--text-primary), 0 2px 0 0 var(--text-primary);
+}
+
+.trait-slider::-moz-range-progress {
+  height: 12px;
+  background: var(--accent-primary);
+}
+
+/* Thumb */
+.trait-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--accent-pink);
+  box-shadow: 0 0 0 2px var(--text-primary), 0 3px 0 0 var(--text-primary);
+  cursor: grab;
+  margin-top: -4px;
+  transition: transform 0.1s ease;
+  image-rendering: pixelated;
+}
+
+.trait-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: var(--accent-pink);
+  box-shadow: 0 0 0 2px var(--text-primary), 0 3px 0 0 var(--text-primary);
+  cursor: grab;
+}
+
+.trait-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+.trait-slider::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+.trait-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--accent-primary), 0 3px 0 0 var(--accent-primary),
+    0 0 12px rgba(167, 139, 250, 0.5);
+}
+
+/* ============================================
+   Fade-in animation for quiz transitions
+   ============================================ */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
