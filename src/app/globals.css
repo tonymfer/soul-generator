@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
+/* ============================================
+   ABTI - Kawaii Pixel Theme
+   Agent Behavior Type Indicator
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Core palette --- */
+  --bg-primary: #faf5ff;
+  --bg-secondary: #f0fdf4;
+  --accent-primary: #a78bfa;
+  --accent-secondary: #34d399;
+  --accent-pink: #f472b6;
+  --accent-yellow: #fbbf24;
+  --text-primary: #1e1b4b;
+  --text-secondary: #6b7280;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+
+  /* --- Pixel border shadow (3D pixel look) --- */
+  --pixel-border: 0 0 0 2px var(--text-primary),
+    0 4px 0 0 var(--text-primary);
+  --pixel-border-sm: 0 0 0 1.5px var(--text-primary),
+    0 2px 0 0 var(--text-primary);
+  --pixel-border-accent: 0 0 0 2px var(--accent-primary),
+    0 4px 0 0 var(--accent-primary);
+  --pixel-border-pink: 0 0 0 2px var(--accent-pink),
+    0 4px 0 0 var(--accent-pink);
+
+  /* --- Glow effects --- */
+  --glow-purple: 0 0 20px rgba(167, 139, 250, 0.4);
+  --glow-pink: 0 0 20px rgba(244, 114, 182, 0.4);
+  --glow-mint: 0 0 20px rgba(52, 211, 153, 0.4);
 }
 
+/* ============================================
+   Tailwind v4 @theme — design tokens
+   ============================================ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+
+  --font-pixel: var(--font-press-start);
+  --font-pixel-accent: var(--font-silkscreen);
+
+  --animate-bounce-pixel: bounce-pixel 0.5s ease infinite alternate;
+  --animate-sparkle: sparkle 1.5s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================
+   Keyframes
+   ============================================ */
+@keyframes bounce-pixel {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
   }
 }
 
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(167, 139, 250, 0.6);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ============================================
+   Base styles
+   ============================================ */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-pixel), monospace;
+  image-rendering: pixelated;
+}
+
+/* Selection color */
+::selection {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* ============================================
+   Pixel border utilities (via @utility)
+   ============================================ */
+@utility pixel-border {
+  box-shadow: var(--pixel-border);
+}
+
+@utility pixel-border-sm {
+  box-shadow: var(--pixel-border-sm);
+}
+
+@utility pixel-border-accent {
+  box-shadow: var(--pixel-border-accent);
+}
+
+@utility pixel-border-pink {
+  box-shadow: var(--pixel-border-pink);
+}
+
+/* Pressed state: remove the bottom shadow offset */
+@utility pixel-border-pressed {
+  box-shadow: 0 0 0 2px var(--text-primary);
+  transform: translateY(2px);
+}
+
+/* ============================================
+   Glow utilities
+   ============================================ */
+@utility glow-purple {
+  box-shadow: var(--glow-purple);
+}
+
+@utility glow-pink {
+  box-shadow: var(--glow-pink);
+}
+
+@utility glow-mint {
+  box-shadow: var(--glow-mint);
+}
+
+/* ============================================
+   Scanline overlay
+   ============================================ */
+@utility scanline-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* ============================================
+   Shimmer loading background
+   ============================================ */
+@utility shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    var(--bg-primary) 25%,
+    var(--accent-primary) 50%,
+    var(--bg-primary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ============================================
+   Pastel gradient backgrounds
+   ============================================ */
+@utility gradient-pastel {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary),
+    var(--bg-secondary)
+  );
+}
+
+@utility gradient-candy {
+  background: linear-gradient(
+    135deg,
+    rgba(167, 139, 250, 0.15),
+    rgba(244, 114, 182, 0.15),
+    rgba(251, 191, 36, 0.1)
+  );
 }
