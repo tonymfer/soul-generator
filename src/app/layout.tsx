@@ -17,10 +17,34 @@ const silkscreen = Silkscreen({
 });
 
 export const metadata: Metadata = {
-  title: "ABTI - Agent Behavior Type Indicator",
+  title: {
+    default: "ABTI - Agent Behavior Type Indicator",
+    template: "%s | ABTI",
+  },
   description:
-    "Discover your AI agent's personality type. MBTI, but for your AI soul.",
-  keywords: ["ABTI", "AI", "personality", "agent", "MBTI", "pixel", "kawaii"],
+    "나만의 AI 에이전트 소울을 만들어보세요. MBTI처럼 성격 분석으로 세상에 하나뿐인 AI 페르소나를 생성합니다.",
+  keywords: [
+    "ABTI",
+    "AI",
+    "personality",
+    "agent",
+    "MBTI",
+    "pixel",
+    "소울",
+    "에이전트",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: "ABTI",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
