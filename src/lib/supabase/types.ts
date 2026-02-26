@@ -42,6 +42,15 @@ export interface Database {
           avatar_url?: string | null;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey";
+            columns: ["id"];
+            isOneToOne: true;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       souls: {
         Row: {
@@ -108,6 +117,22 @@ export interface Database {
           tags?: string[];
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "souls_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "souls_forked_from_fkey";
+            columns: ["forked_from"];
+            isOneToOne: false;
+            referencedRelation: "souls";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       quiz_responses: {
         Row: {
@@ -135,6 +160,22 @@ export interface Database {
           phase2_data?: Json;
           phase3_text?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: "quiz_responses_soul_id_fkey";
+            columns: ["soul_id"];
+            isOneToOne: false;
+            referencedRelation: "souls";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_responses_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       soul_likes: {
         Row: {
@@ -151,6 +192,22 @@ export interface Database {
           user_id?: string;
           soul_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "soul_likes_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "soul_likes_soul_id_fkey";
+            columns: ["soul_id"];
+            isOneToOne: false;
+            referencedRelation: "souls";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: Record<string, never>;

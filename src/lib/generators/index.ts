@@ -24,5 +24,8 @@ export { generateSoulMd } from "./soul-template";
 export { generateSystemPrompt } from "./system-prompt";
 export { generateSampleConversations } from "./conversation-gen";
 
+// Phase 3: AI Enhancement (optional, server-only)
+export { enhanceWithAI } from "./ai-enhancer";
+
 // Utilities
 export { generateSlug, generateSlugWithIndex } from "./slug-generator";
