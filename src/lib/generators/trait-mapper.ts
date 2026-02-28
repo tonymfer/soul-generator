@@ -369,7 +369,7 @@ function applySliders(
   const chaosDelta = traits.chaos - 0.5; // positive = more chaotic
   const formalDelta = traits.formality - 0.5; // positive = more formal
 
-  return {
+  const result: MBTITraitBase = {
     ...base,
 
     // Introversion: reduces verbosity, emoji, enthusiasm; increases formality
@@ -378,17 +378,54 @@ function applySliders(
     enthusiasm_baseline: clamp01(base.enthusiasm_baseline - introDelta * 0.25),
     formality_level: clamp01(base.formality_level + formalDelta * 0.3),
 
-    // Playfulness: increases emoji, tangent, humor shifts toward absurd/pun
+    // Playfulness + chaos: tangent probability
     tangent_probability: clamp01(
       base.tangent_probability + playDelta * 0.2 + chaosDelta * 0.25,
     ),
 
     // Empathy slider directly adjusts empathy trait
     empathy: clamp01(base.empathy + empathyDelta * 0.3),
-
-    // Logic: shifts decision mode isn't numeric, but affects response structure indirectly
-    // handled via communication style below
   };
+
+  // --- Logic slider ---
+  // Numeric: more logical = fewer tangents (always applied)
+  result.tangent_probability = clamp01(
+    result.tangent_probability - logicDelta * 0.15,
+  );
+  // String overrides: only at extreme positions (+-0.25 dead zone)
+  if (logicDelta > 0.25) {
+    result.decision_mode = "logical";
+    result.communication_style = "analytical";
+    result.response_structure = "organized";
+  } else if (logicDelta < -0.25) {
+    result.decision_mode = "intuitive";
+    result.communication_style = "expressive";
+  }
+
+  // --- Playfulness slider ---
+  // Numeric: more playful = more emoji, more enthusiasm (always applied)
+  result.emoji_density = clamp01(result.emoji_density + playDelta * 0.2);
+  result.enthusiasm_baseline = clamp01(
+    result.enthusiasm_baseline + playDelta * 0.15,
+  );
+  // Humor type shift: adjacent types at extreme positions
+  if (playDelta > 0.25) {
+    const humorUp: Partial<
+      Record<MBTITraitBase["humor_type"], MBTITraitBase["humor_type"]>
+    > = { dry: "pun", sarcastic: "absurd" };
+    if (result.humor_type in humorUp) {
+      result.humor_type = humorUp[result.humor_type]!;
+    }
+  } else if (playDelta < -0.25) {
+    const humorDown: Partial<
+      Record<MBTITraitBase["humor_type"], MBTITraitBase["humor_type"]>
+    > = { absurd: "sarcastic", pun: "dry", wholesome: "dry" };
+    if (result.humor_type in humorDown) {
+      result.humor_type = humorDown[result.humor_type]!;
+    }
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
