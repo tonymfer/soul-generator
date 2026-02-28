@@ -110,6 +110,104 @@ describe("mapTraits - playfulness slider", () => {
   });
 });
 
+// ---------- Task 5: ADHD Subtypes ----------
+
+describe("mapTraits - ADHD subtypes", () => {
+  // ----- Inattentive -----
+  it("inattentive: increases tangent_probability", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "inattentive"));
+    expect(result.tangent_probability).toBeGreaterThan(base.tangent_probability);
+  });
+
+  it("inattentive: sets energy_pattern to ambient", () => {
+    const result = mapTraits(neutralInput("ENTJ", "inattentive")); // ENTJ base = steady
+    expect(result.energy_pattern).toBe("ambient");
+  });
+
+  it("inattentive: reduces formality_level", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "inattentive"));
+    expect(result.formality_level).toBeLessThan(base.formality_level);
+  });
+
+  it("inattentive: does NOT change enthusiasm_baseline", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "inattentive"));
+    expect(result.enthusiasm_baseline).toBeCloseTo(base.enthusiasm_baseline, 2);
+  });
+
+  // ----- Hyperactive -----
+  it("hyperactive: sets energy_pattern to burst", () => {
+    const result = mapTraits(neutralInput("INTJ", "hyperactive")); // INTJ base = steady
+    expect(result.energy_pattern).toBe("burst");
+  });
+
+  it("hyperactive: increases enthusiasm_baseline", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "hyperactive"));
+    expect(result.enthusiasm_baseline).toBeGreaterThan(base.enthusiasm_baseline);
+  });
+
+  it("hyperactive: increases emoji_density", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "hyperactive"));
+    expect(result.emoji_density).toBeGreaterThan(base.emoji_density);
+  });
+
+  it("hyperactive: does NOT increase tangent_probability significantly", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "hyperactive"));
+    // Hyperactive shouldn't bump tangent as much as inattentive
+    const inattentive = mapTraits(neutralInput("INTJ", "inattentive"));
+    expect(result.tangent_probability).toBeLessThan(inattentive.tangent_probability);
+  });
+
+  // ----- Combined -----
+  it("combined: increases both tangent_probability and enthusiasm", () => {
+    const base = mapTraits(neutralInput("INTJ", "none"));
+    const result = mapTraits(neutralInput("INTJ", "combined"));
+    expect(result.tangent_probability).toBeGreaterThan(base.tangent_probability);
+    expect(result.enthusiasm_baseline).toBeGreaterThan(base.enthusiasm_baseline);
+  });
+
+  it("combined: sets energy_pattern to burst", () => {
+    const result = mapTraits(neutralInput("INTJ", "combined"));
+    expect(result.energy_pattern).toBe("burst");
+  });
+
+  // ----- None -----
+  it("none: does not modify base traits", () => {
+    const withNone = mapTraits(neutralInput("INTJ", "none"));
+    const base = mapTraits(neutralInput("INTJ"));
+    expect(withNone.tangent_probability).toBeCloseTo(base.tangent_probability, 5);
+    expect(withNone.energy_pattern).toBe(base.energy_pattern);
+    expect(withNone.enthusiasm_baseline).toBeCloseTo(base.enthusiasm_baseline, 5);
+  });
+
+  // ----- Output type check -----
+  it("stores the ADHD subtype in the output", () => {
+    expect(mapTraits(neutralInput("INTJ", "none")).adhd).toBe("none");
+    expect(mapTraits(neutralInput("INTJ", "inattentive")).adhd).toBe("inattentive");
+    expect(mapTraits(neutralInput("INTJ", "hyperactive")).adhd).toBe("hyperactive");
+    expect(mapTraits(neutralInput("INTJ", "combined")).adhd).toBe("combined");
+  });
+
+  // ----- Clamping -----
+  it("all numeric values stay within [0, 1]", () => {
+    // Use ENFP which has high base values - ADHD combined could overflow
+    const result = mapTraits(neutralInput("ENFP", "combined"));
+    const numericKeys = [
+      "verbosity", "emoji_density", "formality_level",
+      "tangent_probability", "enthusiasm_baseline", "empathy",
+    ] as const;
+    for (const key of numericKeys) {
+      expect(result[key]).toBeGreaterThanOrEqual(0);
+      expect(result[key]).toBeLessThanOrEqual(1);
+    }
+  });
+});
+
 // ---------- Baseline ----------
 
 describe("mapTraits - baseline", () => {

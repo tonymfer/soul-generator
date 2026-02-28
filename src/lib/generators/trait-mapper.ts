@@ -429,21 +429,54 @@ function applySliders(
 }
 
 // ---------------------------------------------------------------------------
-// ADHD modifier
+// ADHD modifier (subtype-aware)
 //
-// ADHD boosts tangent_probability, reduces formality, shifts energy_pattern
-// toward "burst" (hyperfocus → distraction cycles).
+// Three clinically-informed subtypes with distinct trait signatures:
+//
+//   Inattentive:  dreamy/ambient energy, high tangent probability,
+//                 lower formality. Does NOT increase enthusiasm.
+//   Hyperactive:  burst energy, higher enthusiasm + expressiveness,
+//                 modest tangent bump.
+//   Combined:     both patterns at reduced intensity (0.6x) to avoid
+//                 clipping numeric values.
 // ---------------------------------------------------------------------------
 
-function applyADHD(base: MBTITraitBase): MBTITraitBase {
-  return {
-    ...base,
-    tangent_probability: clamp01(base.tangent_probability + 0.3),
-    formality_level: clamp01(base.formality_level - 0.2),
-    energy_pattern: "burst",
-    enthusiasm_baseline: clamp01(base.enthusiasm_baseline + 0.1),
-    emoji_density: clamp01(base.emoji_density + 0.1),
-  };
+type ADHDSubtype = Exclude<Phase1Input["adhd"], "none">;
+
+function applyADHD(
+  base: MBTITraitBase,
+  subtype: ADHDSubtype,
+): MBTITraitBase {
+  const result = { ...base };
+
+  switch (subtype) {
+    case "inattentive":
+      // Dreamy, tangential, less structured
+      result.tangent_probability = clamp01(base.tangent_probability + 0.3);
+      result.formality_level = clamp01(base.formality_level - 0.2);
+      result.energy_pattern = "ambient";
+      break;
+
+    case "hyperactive":
+      // Burst energy, expressive, enthusiastic
+      result.energy_pattern = "burst";
+      result.enthusiasm_baseline = clamp01(base.enthusiasm_baseline + 0.15);
+      result.emoji_density = clamp01(base.emoji_density + 0.15);
+      result.tangent_probability = clamp01(base.tangent_probability + 0.1);
+      result.formality_level = clamp01(base.formality_level - 0.1);
+      break;
+
+    case "combined":
+      // Both patterns at reduced intensity
+      result.tangent_probability = clamp01(base.tangent_probability + 0.18);
+      result.formality_level = clamp01(base.formality_level - 0.15);
+      result.energy_pattern = "burst";
+      result.enthusiasm_baseline = clamp01(base.enthusiasm_baseline + 0.1);
+      result.emoji_density = clamp01(base.emoji_density + 0.1);
+      break;
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -475,7 +508,7 @@ export function mapTraits(input: Phase1Input): TraitVector {
 
   // 3. Apply ADHD modifier if subtype selected
   if (input.adhd !== "none") {
-    traits = applyADHD(traits);
+    traits = applyADHD(traits, input.adhd);
   }
 
   return {
