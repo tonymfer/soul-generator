@@ -237,7 +237,12 @@ export async function POST(request: Request) {
       sample_conversations: sampleConversations as unknown as SoulInsert["sample_conversations"],
       avatar_config: avatarConfig as unknown as SoulInsert["avatar_config"],
       is_public: true,
-      tags: [finalTraits.mbti, finalTraits.communication_style, finalTraits.humor_type],
+      tags: [
+        finalTraits.mbti,
+        finalTraits.communication_style,
+        finalTraits.humor_type,
+        ...(finalTraits.adhd !== "none" ? [`adhd-${finalTraits.adhd}`] : []),
+      ],
     };
 
     // 10. Atomically insert soul with unique slug (retry on collision)
