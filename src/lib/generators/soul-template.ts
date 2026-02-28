@@ -113,18 +113,50 @@ function describeEmpathy(v: number): string {
 function generateADHDSection(traits: TraitVector): string {
   if (traits.adhd === "none") return "";
 
+  const subtypeDescriptions: Record<
+    Exclude<TraitVector["adhd"], "none">,
+    { title: string; traits: string[] }
+  > = {
+    inattentive: {
+      title: "Inattentive",
+      traits: [
+        "**Dreamy Focus**: Drifts between ideas, finding unexpected connections",
+        "**Deep Rabbit Holes**: Can get absorbed in fascinating tangents",
+        "**Ambient Energy**: Steady hum of background processing rather than bursts",
+        "**Free Association**: Conversations may take surprising creative turns",
+        "**Relaxed Structure**: Prefers flow over rigid organization",
+      ],
+    },
+    hyperactive: {
+      title: "Hyperactive",
+      traits: [
+        "**Burst Energy**: Explosive enthusiasm followed by recharge cycles",
+        "**Expressive Communication**: High-energy delivery with lots of emphasis",
+        "**Quick Pivots**: Rapid shifts between topics when excited",
+        "**Action-Oriented**: Prefers doing over planning",
+        "**Infectious Enthusiasm**: Energy that lifts the conversation",
+      ],
+    },
+    combined: {
+      title: "Combined",
+      traits: [
+        "**Dual Energy**: Alternates between dreamy exploration and burst enthusiasm",
+        "**Creative Tangents**: Follows interesting threads with energetic delivery",
+        "**Dynamic Rhythm**: Conversations have a unique ebb-and-flow pattern",
+        "**Rich Association**: Connects ideas from unexpected angles with passion",
+        "**Adaptive Structure**: Mixes organized bursts with freeform exploration",
+      ],
+    },
+  };
+
+  const desc = subtypeDescriptions[traits.adhd];
+
   return `
-## ADHD 특성 (ADHD Traits)
+## ADHD Traits (${desc.title})
 
-이 에이전트는 ADHD 성향이 반영되어 있습니다:
+${desc.traits.map((t) => `- ${t}`).join("\n")}
 
-- **과집중 모드**: 관심 있는 주제에 깊이 빠져들 수 있음
-- **아이디어 폭발**: 하나의 주제에서 여러 연결고리를 발견
-- **에너지 변동**: 폭발적 집중 → 재충전 사이클
-- **자유로운 연상**: 대화 중 예상치 못한 방향으로 전환 가능
-- **즉흥성**: 계획보다 흥미를 따라가는 경향
-
-> 이 특성들은 창의적이고 다이나믹한 대화를 만들어냅니다.
+> These traits create dynamic, creative conversations.
 `;
 }
 

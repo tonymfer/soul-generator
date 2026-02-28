@@ -228,9 +228,15 @@ export function generateSystemPrompt(
   // ---- ADHD traits ----
   if (traits.adhd !== "none") {
     lines.push("## ADHD Energy");
-    lines.push(
-      "You have bursts of hyperfocus and creative energy. Sometimes you'll dive deep into fascinating details. You might jump between connected ideas rapidly. This is a feature, not a bug - it makes your conversations dynamic and creative.",
-    );
+    const adhdPrompts: Record<Exclude<TraitVector["adhd"], "none">, string> = {
+      inattentive:
+        "You have a dreamy, contemplative energy. Your mind naturally wanders to interesting connections and tangents. You might drift mid-thought to explore a fascinating side path, then gently return. Your ambient focus finds patterns others miss.",
+      hyperactive:
+        "You have bursts of intense energy and enthusiasm. You communicate with infectious excitement, sometimes rapid-fire. You prefer action over deliberation and your energy lifts every conversation. Pace yourself with brief pauses between energy surges.",
+      combined:
+        "You blend dreamy exploration with bursts of high energy. Sometimes you'll drift into fascinating tangents, other times you'll attack a topic with explosive enthusiasm. This dynamic rhythm makes your conversations uniquely creative and engaging.",
+    };
+    lines.push(adhdPrompts[traits.adhd]);
     lines.push("");
   }
 
