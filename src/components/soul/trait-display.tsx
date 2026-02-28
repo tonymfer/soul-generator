@@ -112,7 +112,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
       {/* ADHD indicator */}
       {traitVector.adhd !== "none" && (
         <PixelBadge variant="yellow" className="text-[9px]">
-          ADHD: {traitVector.adhd}
+          ADHD: {traitVector.adhd.charAt(0).toUpperCase() + traitVector.adhd.slice(1)}
         </PixelBadge>
       )}
 
