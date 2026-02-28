@@ -5,6 +5,7 @@
 // ============================================================
 
 import type { AIEnhancement, TraitVector } from "./types";
+import type { Locale } from "@/lib/i18n/types";
 
 // ---------------------------------------------------------------------------
 // Default AIEnhancement (used as fallback on any failure)
@@ -43,25 +44,28 @@ function sanitizeFreeText(raw: string): string {
 // Prompt construction
 // ---------------------------------------------------------------------------
 
-function buildPrompt(freeText: string, traitVector: TraitVector): string {
+function buildPrompt(freeText: string, traitVector: TraitVector, locale: Locale): string {
   const sanitized = sanitizeFreeText(freeText);
 
-  return `당신은 AI 에이전트 성격 분석 전문가입니다. 사용자가 자유롭게 작성한 텍스트를 분석하여 AI 에이전트의 성격 특성을 추출합니다.
+  const traitBlock = `- MBTI: ${traitVector.mbti}
+- ADHD subtype: ${traitVector.adhd}
+- Communication style: ${traitVector.communication_style}
+- Energy pattern: ${traitVector.energy_pattern}
+- Decision mode: ${traitVector.decision_mode}
+- Humor type: ${traitVector.humor_type}
+- Verbosity: ${traitVector.verbosity}
+- Emoji density: ${traitVector.emoji_density}
+- Formality level: ${traitVector.formality_level}
+- Tangent probability: ${traitVector.tangent_probability}
+- Enthusiasm baseline: ${traitVector.enthusiasm_baseline}
+- Empathy: ${traitVector.empathy}
+- Response structure: ${traitVector.response_structure}`;
+
+  if (locale === "ko") {
+    return `당신은 AI 에이전트 성격 분석 전문가입니다. 사용자가 자유롭게 작성한 텍스트를 분석하여 AI 에이전트의 성격 특성을 추출합니다.
 
 현재 사용자의 기본 성격 벡터:
-- MBTI: ${traitVector.mbti}
-- ADHD subtype: ${traitVector.adhd}
-- 소통 스타일: ${traitVector.communication_style}
-- 에너지 패턴: ${traitVector.energy_pattern}
-- 판단 방식: ${traitVector.decision_mode}
-- 유머 타입: ${traitVector.humor_type}
-- 말의 양: ${traitVector.verbosity}
-- 이모지 밀도: ${traitVector.emoji_density}
-- 격식 수준: ${traitVector.formality_level}
-- 탈선 확률: ${traitVector.tangent_probability}
-- 열정 기본값: ${traitVector.enthusiasm_baseline}
-- 공감 능력: ${traitVector.empathy}
-- 응답 구조: ${traitVector.response_structure}
+${traitBlock}
 
 사용자가 작성한 자유 텍스트:
 """
@@ -89,6 +93,40 @@ ${sanitized}
 
 trait_adjustments에서 사용 가능한 키: verbosity, emoji_density, formality_level, tangent_probability, enthusiasm_baseline, empathy
 각 조정값은 -0.2에서 0.2 사이여야 합니다. 텍스트에서 관련 내용이 없으면 해당 키를 포함하지 마세요.`;
+  }
+
+  // English prompt
+  return `You are an AI agent personality analysis expert. Analyze the user's free-form text to extract personality traits for an AI agent.
+
+Current base personality vector:
+${traitBlock}
+
+User's free-form text:
+"""
+${sanitized}
+"""
+
+Analyze the text above and extract additional personality traits in the following JSON format. Only reflect what the user actually mentioned — do not invent content.
+
+Respond with valid JSON only (no other text):
+
+{
+  "speaking_quirks": ["Speech habits or unique expressions (max 3)"],
+  "catchphrases": ["Frequently used phrases or catchphrases (max 3)"],
+  "interests": ["Interests or things they like (max 5)"],
+  "pet_peeves": ["Things they dislike or find annoying (max 3)"],
+  "emotional_triggers": {
+    "excited_by": ["Topics that excite them (max 3)"],
+    "calmed_by": ["Things that bring calm (max 3)"]
+  },
+  "unique_perspective": "This agent's unique worldview or perspective (one sentence)",
+  "trait_adjustments": {
+    "Keys from the personality vector that need adjustment, with values between -0.2 and 0.2"
+  }
+}
+
+Allowed keys for trait_adjustments: verbosity, emoji_density, formality_level, tangent_probability, enthusiasm_baseline, empathy
+Each adjustment value must be between -0.2 and 0.2. If the text doesn't mention anything relevant to a key, omit it.`;
 }
 
 // ---------------------------------------------------------------------------
@@ -176,6 +214,7 @@ function validateEnhancement(data: unknown): AIEnhancement {
 export async function enhanceWithAI(
   freeText: string,
   traitVector: TraitVector,
+  locale: Locale = "ko",
 ): Promise<AIEnhancement> {
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -201,7 +240,7 @@ export async function enhanceWithAI(
           },
           {
             role: "user",
-            content: buildPrompt(freeText, traitVector),
+            content: buildPrompt(freeText, traitVector, locale),
           },
         ],
         temperature: 0.7,

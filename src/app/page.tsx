@@ -3,6 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { PixelButton, PixelBadge, PixelCard, Sparkle } from "@/components/ui";
 import { SoulCard } from "@/components/gallery/soul-card";
 import { AuthButton } from "@/components/layout/auth-button";
+import { LocaleToggle } from "@/components/layout/locale-toggle";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 
 // ============================================================
 // Landing Page — Server Component
@@ -28,6 +31,8 @@ async function getLatestSouls() {
 
 export default async function Home() {
   const latestSouls = await getLatestSouls();
+  const locale = await getLocale();
+  const m = messages[locale];
 
   return (
     <div className="min-h-screen gradient-pastel">
@@ -41,9 +46,10 @@ export default async function Home() {
             ABTI
           </Link>
           <div className="flex items-center gap-3">
+            <LocaleToggle />
             <Link href="/gallery">
               <PixelButton variant="ghost" size="sm">
-                갤러리
+                {m.common.gallery}
               </PixelButton>
             </Link>
             <AuthButton />
@@ -54,7 +60,6 @@ export default async function Home() {
       {/* ── Hero Section ── */}
       <section className="relative px-4 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center overflow-hidden">
         <div className="max-w-2xl mx-auto flex flex-col items-center gap-6">
-          {/* Floating crystal ball emoji */}
           <div className="relative text-5xl sm:text-6xl animate-float">
             <span role="img" aria-label="crystal ball">
               &#x1F52E;
@@ -62,24 +67,21 @@ export default async function Home() {
             <Sparkle count={6} color="var(--accent-yellow)" />
           </div>
 
-          {/* Hero title */}
           <h1 className="font-pixel text-xl sm:text-2xl md:text-3xl text-text-primary leading-relaxed text-balance">
-            나만의 AI 소울을
+            {m.landing.heroTitle1}
             <br />
-            발견하세요
+            {m.landing.heroTitle2}
           </h1>
 
-          {/* Subtitle */}
           <p className="font-pixel-accent text-xs sm:text-sm text-text-secondary max-w-md leading-relaxed">
-            성격 분석으로 만드는
+            {m.landing.heroSubtitle1}
             <br className="sm:hidden" />
-            {" "}세상에 하나뿐인 AI 에이전트
+            {m.landing.heroSubtitle2}
           </p>
 
-          {/* CTA */}
           <Link href="/create">
             <PixelButton size="lg" variant="primary" className="mt-2 gap-2">
-              지금 시작하기 <span aria-hidden="true">&rarr;</span>
+              {m.landing.cta} <span aria-hidden="true">&rarr;</span>
             </PixelButton>
           </Link>
         </div>
@@ -89,48 +91,45 @@ export default async function Home() {
       <section className="px-4 py-16 sm:py-20 bg-bg-primary/50">
         <div className="max-w-3xl mx-auto space-y-10">
           <h2 className="font-pixel text-sm sm:text-base text-text-primary text-center">
-            어떻게 만들어지나요?
+            {m.landing.howItWorks}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {/* Step 1 */}
             <div className="flex flex-col items-center text-center gap-3">
               <PixelBadge variant="purple" className="text-sm px-3 py-1.5">
                 &#9312;
               </PixelBadge>
               <h3 className="font-pixel text-[10px] sm:text-xs text-text-primary leading-relaxed">
-                MBTI + 성격 분석
+                {m.landing.step1Title}
               </h3>
               <p className="font-pixel-accent text-[10px] text-text-secondary leading-relaxed">
-                퀴즈로 당신의 성격을 분석해요
+                {m.landing.step1Desc}
               </p>
             </div>
 
-            {/* Step 2 */}
             <div className="flex flex-col items-center text-center gap-3">
               <PixelBadge variant="pink" className="text-sm px-3 py-1.5">
                 &#9313;
               </PixelBadge>
               <h3 className="font-pixel text-[10px] sm:text-xs text-text-primary leading-relaxed">
-                AI 소울 생성
+                {m.landing.step2Title}
               </h3>
               <p className="font-pixel-accent text-[10px] text-text-secondary leading-relaxed">
-                분석 결과로 소울을 자동 생성!
+                {m.landing.step2Desc}
               </p>
             </div>
 
-            {/* Step 3 */}
             <div className="flex flex-col items-center text-center gap-3">
               <PixelBadge variant="mint" className="text-sm px-3 py-1.5">
                 &#9314;
               </PixelBadge>
               <h3 className="font-pixel text-[10px] sm:text-xs text-text-primary leading-relaxed">
-                공유 &amp; 활용
+                {m.landing.step3Title}
               </h3>
               <p className="font-pixel-accent text-[10px] text-text-secondary leading-relaxed">
-                갤러리에 공유하고 AI 도구에
+                {m.landing.step3Desc1}
                 <br />
-                바로 적용하세요
+                {m.landing.step3Desc2}
               </p>
             </div>
           </div>
@@ -141,16 +140,16 @@ export default async function Home() {
       <section className="px-4 py-16 sm:py-20 text-center">
         <div className="max-w-xl mx-auto space-y-6">
           <h2 className="font-pixel-accent text-base sm:text-lg text-accent-primary">
-            What&apos;s your ABTI?
+            {m.landing.socialTagline}
           </h2>
           <p className="font-pixel text-[10px] sm:text-xs text-text-secondary leading-relaxed">
-            &ldquo;MBTI처럼 물어보세요:
+            &ldquo;{m.landing.socialSubtitle1}
             <br />
-            너 ABTI 뭐야?&rdquo;
+            {m.landing.socialSubtitle2}&rdquo;
           </p>
           <Link href="/create">
             <PixelButton size="lg" variant="pink" className="mt-4 gap-2">
-              지금 시작하기 <span aria-hidden="true">&rarr;</span>
+              {m.landing.cta} <span aria-hidden="true">&rarr;</span>
             </PixelButton>
           </Link>
         </div>
@@ -160,47 +159,47 @@ export default async function Home() {
       <section className="px-4 py-16 sm:py-20 bg-bg-primary/50">
         <div className="max-w-3xl mx-auto space-y-10">
           <h2 className="font-pixel text-sm sm:text-base text-text-primary text-center">
-            ABTI로 뭘 할 수 있나요?
+            {m.landing.featuresTitle}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <PixelCard gradient className="text-center">
               <div className="text-2xl mb-3">&#x1F3AD;</div>
               <h3 className="font-pixel text-[10px] text-text-primary mb-2">
-                나만의 AI 페르소나
+                {m.landing.feature1Title}
               </h3>
               <p className="font-pixel-accent text-[9px] text-text-secondary leading-relaxed">
-                성격 분석 기반 고유한 AI 캐릭터 생성
+                {m.landing.feature1Desc}
               </p>
             </PixelCard>
 
             <PixelCard gradient className="text-center">
               <div className="text-2xl mb-3">&#x1F4E6;</div>
               <h3 className="font-pixel text-[10px] text-text-primary mb-2">
-                SOUL.md &amp; 시스템 프롬프트
+                {m.landing.feature2Title}
               </h3>
               <p className="font-pixel-accent text-[9px] text-text-secondary leading-relaxed">
-                바로 사용 가능한 프롬프트 자동 생성
+                {m.landing.feature2Desc}
               </p>
             </PixelCard>
 
             <PixelCard gradient className="text-center">
               <div className="text-2xl mb-3">&#x1F310;</div>
               <h3 className="font-pixel text-[10px] text-text-primary mb-2">
-                Claude, GPT, OpenClaw 호환
+                {m.landing.feature3Title}
               </h3>
               <p className="font-pixel-accent text-[9px] text-text-secondary leading-relaxed">
-                주요 AI 플랫폼에서 바로 활용
+                {m.landing.feature3Desc}
               </p>
             </PixelCard>
 
             <PixelCard gradient className="text-center">
               <div className="text-2xl mb-3">&#x1F3A8;</div>
               <h3 className="font-pixel text-[10px] text-text-primary mb-2">
-                픽셀 아바타 자동 생성
+                {m.landing.feature4Title}
               </h3>
               <p className="font-pixel-accent text-[9px] text-text-secondary leading-relaxed">
-                성격에 맞는 귀여운 픽셀 아바타
+                {m.landing.feature4Desc}
               </p>
             </PixelCard>
           </div>
@@ -212,7 +211,7 @@ export default async function Home() {
         <section className="px-4 py-16 sm:py-20">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="font-pixel text-sm sm:text-base text-text-primary text-center">
-              소울 갤러리 미리보기
+              {m.landing.galleryPreview}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -224,7 +223,7 @@ export default async function Home() {
             <div className="text-center">
               <Link href="/gallery">
                 <PixelButton variant="ghost" size="md" className="gap-2">
-                  갤러리 더 보기 <span aria-hidden="true">&rarr;</span>
+                  {m.landing.galleryMore} <span aria-hidden="true">&rarr;</span>
                 </PixelButton>
               </Link>
             </div>

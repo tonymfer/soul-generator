@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelButton } from "@/components/ui/pixel-button";
 import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // SampleConversations — chat bubble display for conversations
@@ -44,9 +45,11 @@ function ChatBubble({ message }: { message: Message }) {
 function ConversationSection({
   conversation,
   index,
+  label,
 }: {
   conversation: Message[];
   index: number;
+  label: string;
 }) {
   const [isExpanded, setIsExpanded] = useState(index === 0);
 
@@ -61,7 +64,7 @@ function ConversationSection({
       >
         <span className="flex items-center gap-1.5">
           <MessageCircle size={12} />
-          대화 {index + 1}
+          {label} {index + 1}
         </span>
         {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
       </PixelButton>
@@ -78,12 +81,14 @@ function ConversationSection({
 }
 
 export function SampleConversations({ conversations }: SampleConversationsProps) {
+  const m = useMessages();
+
   if (!conversations || conversations.length === 0) return null;
 
   return (
     <PixelCard className="space-y-4">
       <h2 className="font-pixel text-sm text-accent-primary">
-        샘플 대화
+        {m.conversations.title}
       </h2>
 
       <div className="space-y-3">
@@ -92,6 +97,7 @@ export function SampleConversations({ conversations }: SampleConversationsProps)
             key={i}
             conversation={conversation}
             index={i}
+            label={m.conversations.conversation}
           />
         ))}
       </div>

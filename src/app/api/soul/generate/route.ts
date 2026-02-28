@@ -18,6 +18,8 @@ import {
 } from "@/lib/generators";
 import { enhanceWithAI } from "@/lib/generators/ai-enhancer";
 import { traitToAvatarConfig } from "@/lib/avatar";
+import { getLocale, type Locale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 import type { Phase1Input, AIEnhancement, TraitVector } from "@/lib/generators/types";
 import type { Database, Json, SoulInsert } from "@/lib/supabase/types";
 
@@ -36,23 +38,11 @@ interface GenerateRequestBody {
 // Tagline generator
 // ---------------------------------------------------------------------------
 
-function generateTagline(traits: TraitVector): string {
-  const styleLabel: Record<TraitVector["communication_style"], string> = {
-    direct: "직설적인",
-    warm: "따뜻한",
-    analytical: "분석적인",
-    expressive: "표현력 풍부한",
-  };
-
-  const humorLabel: Record<TraitVector["humor_type"], string> = {
-    dry: "드라이 위트의",
-    pun: "말장난을 사랑하는",
-    sarcastic: "날카로운 풍자의",
-    wholesome: "힐링 유머의",
-    absurd: "텐션 폭발의",
-  };
-
-  return `${styleLabel[traits.communication_style]} ${humorLabel[traits.humor_type]} AI 소울`;
+function generateTagline(traits: TraitVector, locale: Locale): string {
+  const m = messages[locale].tagline;
+  const style = m.communication[traits.communication_style];
+  const humor = m.humor[traits.humor_type];
+  return `${style} ${humor} ${m.aiSoul}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -71,6 +61,7 @@ async function insertSoulWithUniqueSlug(
   supabase: Awaited<ReturnType<typeof createClient>>,
   soulName: string,
   soulInsert: SoulInsert,
+  locale: Locale,
 ): Promise<{ slug: string; id: string } | { error: string; status: number }> {
   const baseSlug = generateSlug(soulName);
 
@@ -88,7 +79,7 @@ async function insertSoulWithUniqueSlug(
   // If not a unique violation, it's a real error
   if (error.code !== PG_UNIQUE_VIOLATION) {
     console.error("[generate] Soul insert error:", error);
-    return { error: "소울 생성에 실패했습니다. 다시 시도해주세요.", status: 500 };
+    return { error: messages[locale].api.generationFailed, status: 500 };
   }
 
   // Unique collision — retry with indexed slugs
@@ -107,7 +98,7 @@ async function insertSoulWithUniqueSlug(
     // If it's not another collision, stop retrying
     if (retryError.code !== PG_UNIQUE_VIOLATION) {
       console.error("[generate] Soul insert error:", retryError);
-      return { error: "소울 생성에 실패했습니다. 다시 시도해주세요.", status: 500 };
+      return { error: messages[locale].api.generationFailed, status: 500 };
     }
   }
 
@@ -146,6 +137,9 @@ function validateRequestBody(
 // ---------------------------------------------------------------------------
 
 export async function POST(request: Request) {
+  const locale = await getLocale();
+  const m = messages[locale];
+
   try {
     // 1. Parse request body
     let body: unknown;
@@ -153,7 +147,7 @@ export async function POST(request: Request) {
       body = await request.json();
     } catch {
       return NextResponse.json(
-        { error: "잘못된 요청 형식입니다." },
+        { error: m.api.invalidRequest },
         { status: 400 },
       );
     }
@@ -161,7 +155,7 @@ export async function POST(request: Request) {
     // 2. Validate
     if (!validateRequestBody(body)) {
       return NextResponse.json(
-        { error: "소울 이름은 필수 항목입니다." },
+        { error: m.api.nameRequired },
         { status: 400 },
       );
     }
@@ -183,7 +177,7 @@ export async function POST(request: Request) {
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: "로그인이 필요합니다." },
+        { error: m.api.loginRequired },
         { status: 401 },
       );
     }
@@ -196,7 +190,7 @@ export async function POST(request: Request) {
     let aiEnhancement: AIEnhancement | undefined;
     if (freeText && freeText.trim().length > 0) {
       try {
-        aiEnhancement = await enhanceWithAI(freeText.trim(), finalTraits);
+        aiEnhancement = await enhanceWithAI(freeText.trim(), finalTraits, locale);
       } catch (error) {
         console.error("[generate] AI enhancement failed, continuing without:", error);
         // Continue without AI enhancement — it's optional
@@ -204,16 +198,17 @@ export async function POST(request: Request) {
     }
 
     // 6. Generate outputs
-    const soulMd = generateSoulMd(soulName, finalTraits, aiEnhancement);
-    const systemPrompt = generateSystemPrompt(soulName, finalTraits, aiEnhancement);
+    const soulMd = generateSoulMd(soulName, finalTraits, aiEnhancement, locale);
+    const systemPrompt = generateSystemPrompt(soulName, finalTraits, aiEnhancement, locale);
     const sampleConversations = generateSampleConversations(
       soulName,
       finalTraits,
       aiEnhancement,
+      locale,
     );
 
     // 7. Generate tagline
-    const tagline = generateTagline(finalTraits);
+    const tagline = generateTagline(finalTraits, locale);
 
     // 8. Build personality_data for storage
     const personalityData = {
@@ -246,7 +241,7 @@ export async function POST(request: Request) {
     };
 
     // 10. Atomically insert soul with unique slug (retry on collision)
-    const insertResult = await insertSoulWithUniqueSlug(supabase, soulName, soulInsert);
+    const insertResult = await insertSoulWithUniqueSlug(supabase, soulName, soulInsert, locale);
 
     if ("error" in insertResult) {
       return NextResponse.json(
@@ -283,7 +278,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[generate] Unexpected error:", error);
     return NextResponse.json(
-      { error: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요." },
+      { error: m.api.serverError },
       { status: 500 },
     );
   }

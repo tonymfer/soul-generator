@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { PixelButton } from "@/components/ui/pixel-button";
 import { AuthButton } from "./auth-button";
+import { LocaleToggle } from "./locale-toggle";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 
 // ============================================================
 // NavBar — Shared navigation bar for all pages
@@ -12,11 +15,15 @@ interface NavBarProps {
   backLabel?: string;
 }
 
-export function NavBar({
+export async function NavBar({
   showBack = false,
   backHref = "/",
-  backLabel = "돌아가기",
+  backLabel,
 }: NavBarProps) {
+  const locale = await getLocale();
+  const m = messages[locale];
+  const resolvedBackLabel = backLabel ?? m.common.back;
+
   return (
     <nav className="sticky top-0 z-10 bg-bg-primary/80 backdrop-blur-sm border-b-2 border-card-border">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -27,7 +34,7 @@ export function NavBar({
               href={backHref}
               className="font-pixel text-[10px] text-text-secondary hover:text-accent-primary transition-colors"
             >
-              &larr; {backLabel}
+              &larr; {resolvedBackLabel}
             </Link>
           )}
         </div>
@@ -40,11 +47,12 @@ export function NavBar({
           ABTI
         </Link>
 
-        {/* Right side: gallery link + auth */}
+        {/* Right side: locale toggle + gallery link + auth */}
         <div className="flex items-center gap-3">
+          <LocaleToggle />
           <Link href="/gallery" className="hidden sm:inline-flex">
             <PixelButton variant="ghost" size="sm">
-              갤러리
+              {m.common.gallery}
             </PixelButton>
           </Link>
           <AuthButton />

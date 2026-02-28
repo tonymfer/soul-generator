@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Download, ChevronDown, FileText, Code, Package, User } from "lucide-react";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // ExportMenu — pixel-styled dropdown for soul file exports
@@ -12,60 +13,55 @@ interface ExportMenuProps {
   title: string;
 }
 
-const EXPORT_OPTIONS = [
-  {
-    format: "soul-md",
-    label: "SOUL.md 다운로드",
-    icon: FileText,
-    description: "마크다운 소울 파일",
-  },
-  {
-    format: "claude-skill",
-    label: "Claude Skill 다운로드",
-    icon: Code,
-    description: "Claude Code 스킬",
-  },
-  {
-    format: "openclaw",
-    label: "OpenClaw 패키지 다운로드",
-    icon: Package,
-    description: "OpenClaw 형식",
-  },
-  {
-    format: "character-card",
-    label: "Character Card 다운로드",
-    icon: User,
-    description: "SillyTavern 호환",
-  },
-] as const;
-
 export function ExportMenu({ soulId, title }: ExportMenuProps) {
   const [open, setOpen] = useState(false);
   const [downloading, setDownloading] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const m = useMessages();
 
-  // Close on outside click
+  const EXPORT_OPTIONS = [
+    {
+      format: "soul-md",
+      label: m.exportMenu.soulMdDownload,
+      icon: FileText,
+      description: m.exportMenu.soulMdDesc,
+    },
+    {
+      format: "claude-skill",
+      label: m.exportMenu.claudeSkillDownload,
+      icon: Code,
+      description: m.exportMenu.claudeSkillDesc,
+    },
+    {
+      format: "openclaw",
+      label: m.exportMenu.openclawDownload,
+      icon: Package,
+      description: m.exportMenu.openclawDesc,
+    },
+    {
+      format: "character-card",
+      label: m.exportMenu.characterCardDownload,
+      icon: User,
+      description: m.exportMenu.characterCardDesc,
+    },
+  ];
+
   useEffect(() => {
     if (!open) return;
-
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
-
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
     }
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open]);
@@ -73,16 +69,11 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
   const handleDownload = useCallback(
     async (format: string) => {
       setDownloading(format);
-
       try {
         const url = `/api/soul/${soulId}/export?format=${format}`;
         const res = await fetch(url);
+        if (!res.ok) throw new Error("Export failed");
 
-        if (!res.ok) {
-          throw new Error("Export failed");
-        }
-
-        // Extract filename from Content-Disposition or generate one
         const disposition = res.headers.get("Content-Disposition");
         let filename = `${title}-${format}`;
         if (disposition) {
@@ -90,7 +81,6 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
           if (match) filename = match[1];
         }
 
-        // Create blob and trigger download
         const blob = await res.blob();
         const blobUrl = URL.createObjectURL(blob);
         const anchor = document.createElement("a");
@@ -99,13 +89,12 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
         document.body.appendChild(anchor);
         anchor.click();
 
-        // Cleanup
         setTimeout(() => {
           URL.revokeObjectURL(blobUrl);
           document.body.removeChild(anchor);
         }, 100);
       } catch {
-        // Silently fail — could add toast later
+        // Silently fail
       } finally {
         setDownloading(null);
         setOpen(false);
@@ -116,7 +105,6 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
 
   return (
     <div ref={menuRef} className="relative inline-flex">
-      {/* Trigger button */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -132,14 +120,13 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
         aria-haspopup="true"
       >
         <Download size={12} />
-        <span>내보내기</span>
+        <span>{m.exportMenu.exportButton}</span>
         <ChevronDown
           size={10}
           className={`transition-transform duration-150 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
-      {/* Dropdown menu */}
       {open && (
         <div
           className={[
@@ -152,14 +139,12 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
           ].join(" ")}
           role="menu"
         >
-          {/* Header */}
           <div className="px-3 py-2 border-b border-card-border">
             <span className="font-pixel text-[8px] text-text-secondary">
-              내보내기 형식 선택
+              {m.exportMenu.selectFormat}
             </span>
           </div>
 
-          {/* Options */}
           {EXPORT_OPTIONS.map((option) => {
             const Icon = option.icon;
             const isDownloading = downloading === option.format;
@@ -186,7 +171,7 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
                 />
                 <div className="flex flex-col gap-0.5">
                   <span className="font-pixel text-[9px] text-text-primary leading-tight">
-                    {isDownloading ? "다운로드 중..." : option.label}
+                    {isDownloading ? m.exportMenu.downloading : option.label}
                   </span>
                   <span className="font-pixel-accent text-[8px] text-text-secondary leading-tight">
                     {option.description}
@@ -196,10 +181,9 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
             );
           })}
 
-          {/* Footer */}
           <div className="px-3 py-1.5 border-t border-card-border">
             <span className="font-pixel text-[7px] text-text-secondary">
-              UTF-8 텍스트 파일
+              {m.exportMenu.footer}
             </span>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { Copy, Check, Share2 } from "lucide-react";
 import { LikeButton } from "./like-button";
 import { ForkButton } from "./fork-button";
 import { ExportMenu } from "./export-menu";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // SoulActions — bottom action bar with copy, like, fork, share
@@ -16,13 +17,9 @@ interface SoulActionsProps {
   soulMd: string;
   likesCount: number;
   slug: string;
-  /** Whether current user has liked this soul (server-checked) */
   liked: boolean;
-  /** Soul UUID for like toggle */
   soulId: string;
-  /** Soul title for export filenames */
   title: string;
-  /** Fork count */
   forksCount: number;
 }
 
@@ -38,6 +35,7 @@ export function SoulActions({
 }: SoulActionsProps) {
   const [promptCopied, setPromptCopied] = useState(false);
   const [soulMdCopied, setSoulMdCopied] = useState(false);
+  const m = useMessages();
 
   const copyToClipboard = useCallback(
     async (text: string, setter: (v: boolean) => void) => {
@@ -65,7 +63,6 @@ export function SoulActions({
         // User cancelled or share failed
       }
     } else {
-      // Fallback: copy URL
       try {
         await navigator.clipboard.writeText(url);
       } catch {
@@ -83,7 +80,7 @@ export function SoulActions({
         className="gap-1.5"
       >
         {promptCopied ? <Check size={12} /> : <Copy size={12} />}
-        <span>{promptCopied ? "복사됨!" : "시스템 프롬프트 복사"}</span>
+        <span>{promptCopied ? m.soulActions.copied : m.soulActions.copySystemPrompt}</span>
       </PixelButton>
 
       <PixelButton
@@ -93,7 +90,7 @@ export function SoulActions({
         className="gap-1.5"
       >
         {soulMdCopied ? <Check size={12} /> : <Copy size={12} />}
-        <span>{soulMdCopied ? "복사됨!" : "SOUL.md 복사"}</span>
+        <span>{soulMdCopied ? m.soulActions.copied : m.soulActions.copySoulMd}</span>
       </PixelButton>
 
       <ExportMenu soulId={soulId} title={title} />
@@ -116,7 +113,7 @@ export function SoulActions({
         className="gap-1.5"
       >
         <Share2 size={12} />
-        <span>공유하기</span>
+        <span>{m.soulActions.share}</span>
       </PixelButton>
     </div>
   );

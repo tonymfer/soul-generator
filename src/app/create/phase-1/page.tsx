@@ -6,20 +6,22 @@ import { MBTISelector } from "@/components/quiz/mbti-selector";
 import { TraitSlider } from "@/components/quiz/trait-slider";
 import { PixelButton, PixelCard } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
-
-const TRAIT_SLIDERS = [
-  { key: "introversion" as const, left: "내향적", right: "외향적" },
-  { key: "playfulness" as const, left: "차분한", right: "장난기" },
-  { key: "logic" as const, left: "감성적", right: "논리적" },
-  { key: "empathy" as const, left: "개인주의", right: "공감적" },
-  { key: "chaos" as const, left: "질서정연", right: "자유분방" },
-  { key: "formality" as const, left: "캐주얼", right: "포멀" },
-];
+import { useMessages } from "@/lib/i18n";
 
 export default function Phase1Page() {
   const router = useRouter();
   const { state, setPhase1, setCurrentPhase } = useQuizState();
   const { phase1 } = state;
+  const m = useMessages();
+
+  const TRAIT_SLIDERS = [
+    { key: "introversion" as const, left: m.phase1.traitIntroversion, right: m.phase1.traitExtroversion },
+    { key: "playfulness" as const, left: m.phase1.traitCalm, right: m.phase1.traitPlayful },
+    { key: "logic" as const, left: m.phase1.traitEmotional, right: m.phase1.traitLogical },
+    { key: "empathy" as const, left: m.phase1.traitIndividualistic, right: m.phase1.traitEmpathetic },
+    { key: "chaos" as const, left: m.phase1.traitOrderly, right: m.phase1.traitCarefree },
+    { key: "formality" as const, left: m.phase1.traitCasual, right: m.phase1.traitFormal },
+  ];
 
   const handleMBTISelect = (code: string) => {
     setPhase1({ mbti: code });
@@ -44,10 +46,10 @@ export default function Phase1Page() {
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <h2 className="font-pixel text-xs sm:text-sm text-text-primary">
-            {"MBTI 유형 선택"}
+            {m.phase1.mbtiTitle}
           </h2>
           <p className="font-pixel text-[8px] text-text-secondary">
-            {"당신의 MBTI를 선택하세요. 모르면 건너뛸 수 있어요!"}
+            {m.phase1.mbtiSubtitle}
           </p>
         </div>
         <MBTISelector selected={phase1.mbti} onSelect={handleMBTISelect} />
@@ -57,19 +59,19 @@ export default function Phase1Page() {
       <section className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <h2 className="font-pixel text-xs sm:text-sm text-text-primary">
-            {"ADHD Subtype"}
+            {m.phase1.adhdTitle}
           </h2>
           <p className="font-pixel text-[8px] text-text-secondary">
-            {"Shapes your agent's energy pattern and focus style"}
+            {m.phase1.adhdSubtitle}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-2">
           {(
             [
-              { value: "none", label: "None", desc: "Steady focus" },
-              { value: "inattentive", label: "Inattentive", desc: "Dreamy, tangential" },
-              { value: "hyperactive", label: "Hyperactive", desc: "Burst energy, expressive" },
-              { value: "combined", label: "Combined", desc: "Both traits mixed" },
+              { value: "none", label: m.phase1.adhdNone, desc: m.phase1.adhdNoneDesc },
+              { value: "inattentive", label: m.phase1.adhdInattentive, desc: m.phase1.adhdInattentiveDesc },
+              { value: "hyperactive", label: m.phase1.adhdHyperactive, desc: m.phase1.adhdHyperactiveDesc },
+              { value: "combined", label: m.phase1.adhdCombined, desc: m.phase1.adhdCombinedDesc },
             ] as const
           ).map((opt) => (
             <PixelCard
@@ -95,10 +97,10 @@ export default function Phase1Page() {
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <h2 className="font-pixel text-xs sm:text-sm text-text-primary">
-            {"성격 슬라이더"}
+            {m.phase1.sliderTitle}
           </h2>
           <p className="font-pixel text-[8px] text-text-secondary">
-            {"슬라이더를 움직여서 성격을 세밀하게 조정하세요"}
+            {m.phase1.sliderSubtitle}
           </p>
         </div>
 
@@ -123,7 +125,7 @@ export default function Phase1Page() {
           onClick={handleNext}
           className="w-full sm:w-auto"
         >
-          {"다음 \u2192"}
+          {m.phase1.nextButton}
         </PixelButton>
       </div>
     </div>

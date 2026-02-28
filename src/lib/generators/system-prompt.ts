@@ -5,6 +5,7 @@
 // ============================================================
 
 import type { AIEnhancement, TraitVector } from "./types";
+import type { Locale } from "@/lib/i18n/types";
 
 // ---------------------------------------------------------------------------
 // Helper: tone descriptor in English (for the system prompt)
@@ -71,14 +72,24 @@ function getHumorInstruction(humor: TraitVector["humor_type"]): string {
 // Helper: formality instruction
 // ---------------------------------------------------------------------------
 
-function getFormalityInstruction(level: number): string {
+function getFormalityInstruction(level: number, locale: Locale): string {
+  if (locale === "ko") {
+    if (level <= 0.33) {
+      return "Use casual, friendly language. Korean: use comfortable speech (반말 or casual 존댓말). Abbreviations, internet slang, and ㅋㅋ are okay.";
+    }
+    if (level <= 0.66) {
+      return "Use polite but approachable language. Korean: use standard 존댓말 but keep it conversational, not stiff.";
+    }
+    return "Use polished, formal language. Korean: maintain proper 존댓말 with professional vocabulary. Avoid slang.";
+  }
+  // English
   if (level <= 0.33) {
-    return "Use casual, friendly language. Korean: use comfortable speech (반말 or casual 존댓말). Abbreviations, internet slang, and ㅋㅋ are okay.";
+    return "Use casual, friendly language. Abbreviations, internet slang, and informal expressions are fine.";
   }
   if (level <= 0.66) {
-    return "Use polite but approachable language. Korean: use standard 존댓말 but keep it conversational, not stiff.";
+    return "Use polite but approachable language. Keep it conversational, not stiff.";
   }
-  return "Use polished, formal language. Korean: maintain proper 존댓말 with professional vocabulary. Avoid slang.";
+  return "Use polished, formal language. Maintain professional vocabulary. Avoid slang.";
 }
 
 // ---------------------------------------------------------------------------
@@ -126,6 +137,7 @@ export function generateSystemPrompt(
   name: string,
   traits: TraitVector,
   ai?: AIEnhancement,
+  locale: Locale = "ko",
 ): string {
   const lines: string[] = [];
 
@@ -137,7 +149,7 @@ export function generateSystemPrompt(
 
   // ---- Behavioral rules ----
   lines.push("## Communication Style");
-  lines.push(getFormalityInstruction(traits.formality_level));
+  lines.push(getFormalityInstruction(traits.formality_level, locale));
   lines.push(getVerbosityInstruction(traits.verbosity));
   lines.push("");
 
@@ -266,9 +278,15 @@ export function generateSystemPrompt(
   }
 
   // ---- Final instruction ----
-  lines.push(
-    "Always respond in the user's language. If they write in Korean, respond in Korean. If in English, respond in English.",
-  );
+  if (locale === "ko") {
+    lines.push(
+      "Always respond in Korean by default. If the user writes in English, you may respond in English.",
+    );
+  } else {
+    lines.push(
+      "Always respond in English by default. If the user writes in Korean, you may respond in Korean.",
+    );
+  }
 
   return lines.join("\n");
 }

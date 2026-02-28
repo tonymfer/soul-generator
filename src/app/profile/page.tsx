@@ -7,30 +7,28 @@ import { SoulCard } from "@/components/gallery/soul-card";
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelBadge } from "@/components/ui/pixel-badge";
 import { PixelButton } from "@/components/ui/pixel-button";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 
 // ============================================================
 // My Profile / Dashboard Page — Server Component
-// Shows the current user's own profile including private souls.
-// Redirects to home if not logged in.
 // ============================================================
 
-export const metadata: Metadata = {
-  title: "내 프로필 | ABTI",
-  description: "내 프로필과 소울을 관리하세요.",
-};
-
-/** Format join date in Korean */
-function formatJoinDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  return `${year}년 ${month}월`;
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const m = messages[locale];
+  return {
+    title: m.meta.myProfileTitle,
+    description: m.meta.myProfileDescription,
+  };
 }
 
 export default async function MyProfilePage() {
+  const locale = await getLocale();
+  const m = messages[locale];
+
   const supabase = await createClient();
 
-  // Check auth
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -39,7 +37,6 @@ export default async function MyProfilePage() {
     redirect("/");
   }
 
-  // Fetch profile
   const { data: profile } = await supabase
     .from("profiles")
     .select("id, username, display_name, avatar_url, created_at")
@@ -50,7 +47,6 @@ export default async function MyProfilePage() {
     redirect("/");
   }
 
-  // Fetch ALL souls (including private)
   const { data: souls } = await supabase
     .from("souls")
     .select(
@@ -61,21 +57,21 @@ export default async function MyProfilePage() {
 
   const allSouls = souls ?? [];
 
-  // Count total likes across all public souls
   const totalLikes = allSouls
     .filter((s) => s.is_public)
     .reduce((sum, s) => sum + (s.likes_count ?? 0), 0);
 
   const displayName = profile.display_name ?? profile.username;
 
+  const date = new Date(profile.created_at);
+  const joinDateStr = m.profile.formatJoinDate(date.getFullYear(), date.getMonth() + 1);
+
   return (
     <div className="min-h-screen gradient-pastel">
-      <NavBar showBack backHref="/" backLabel="홈으로" />
+      <NavBar showBack backHref="/" backLabel={m.common.home} />
 
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 animate-fade-in-up">
-        {/* Profile Header */}
         <section className="flex flex-col items-center text-center space-y-4">
-          {/* Avatar */}
           {profile.avatar_url ? (
             <img
               src={profile.avatar_url}
@@ -89,53 +85,46 @@ export default async function MyProfilePage() {
             </div>
           )}
 
-          {/* Name */}
           <h1 className="font-pixel text-base sm:text-lg text-text-primary">
             {displayName}
           </h1>
 
-          {/* Username */}
           <p className="font-pixel-accent text-xs text-text-secondary">
             @{profile.username}
           </p>
 
-          {/* Join date */}
           <p className="font-pixel text-[9px] text-text-secondary">
-            가입일: {formatJoinDate(profile.created_at)}
+            {m.common.joinDate} {joinDateStr}
           </p>
 
-          {/* Stats badges */}
           <div className="flex gap-3">
             <PixelBadge variant="purple">
-              소울 {allSouls.length}개
+              {m.common.souls} {allSouls.length}{m.common.count}
             </PixelBadge>
             <PixelBadge variant="pink">
-              좋아요 {totalLikes}
+              {m.common.likes} {totalLikes}
             </PixelBadge>
           </div>
 
-          {/* Action buttons */}
           <div className="flex gap-3 pt-2">
             <Link href={`/profile/${profile.username}`}>
               <PixelButton variant="ghost" size="sm">
-                공개 프로필 보기
+                {m.profile.viewPublicProfile}
               </PixelButton>
             </Link>
           </div>
         </section>
 
-        {/* Divider */}
         <div className="border-t-2 border-card-border" />
 
-        {/* Soul Grid */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-pixel text-xs text-text-primary">
-              나의 소울들
+              {m.profile.mySouls}
             </h2>
             <Link href="/create">
               <PixelButton variant="primary" size="sm">
-                새 소울 만들기
+                {m.profile.createNew}
               </PixelButton>
             </Link>
           </div>
@@ -146,7 +135,7 @@ export default async function MyProfilePage() {
                 <div key={soul.slug} className="relative">
                   {!soul.is_public && (
                     <div className="absolute top-2 right-2 z-[1]">
-                      <PixelBadge variant="default">비공개</PixelBadge>
+                      <PixelBadge variant="default">{m.common.private}</PixelBadge>
                     </div>
                   )}
                   <SoulCard soul={soul} />
@@ -156,11 +145,11 @@ export default async function MyProfilePage() {
           ) : (
             <PixelCard className="text-center py-12 space-y-4">
               <p className="font-pixel text-sm text-text-secondary">
-                아직 소울이 없어요!
+                {m.profile.noSoulsYet}
               </p>
               <Link href="/create">
                 <PixelButton variant="primary" size="md">
-                  소울 만들기 &rarr;
+                  {m.profile.createSoul} &rarr;
                 </PixelButton>
               </Link>
             </PixelCard>

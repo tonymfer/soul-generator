@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils/cn";
 import { MBTI_TYPES } from "@/lib/constants/mbti";
+import { useLocale, useMessages } from "@/lib/i18n";
 
 interface MBTISelectorProps {
   selected: string;
@@ -11,10 +12,13 @@ interface MBTISelectorProps {
 
 /**
  * 4x4 responsive grid of all 16 MBTI types.
- * Each type is a pixel card with emoji + Korean name.
+ * Each type is a pixel card with emoji + localized name.
  * Includes a "skip" option for users who don't know their type.
  */
 function MBTISelector({ selected, onSelect, className }: MBTISelectorProps) {
+  const locale = useLocale();
+  const m = useMessages();
+
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
@@ -47,14 +51,13 @@ function MBTISelector({ selected, onSelect, className }: MBTISelectorProps) {
                 {type.code}
               </span>
               <span className="font-pixel text-[7px] sm:text-[8px] text-text-secondary text-center leading-tight">
-                {type.nameKo}
+                {locale === "ko" ? type.nameKo : type.nameEn}
               </span>
             </button>
           );
         })}
       </div>
 
-      {/* Skip option */}
       <button
         type="button"
         onClick={() => onSelect("")}
@@ -71,7 +74,7 @@ function MBTISelector({ selected, onSelect, className }: MBTISelectorProps) {
           ],
         )}
       >
-        {"모르겠어요 (기본 설정으로 시작)"}
+        {m.mbtiSelector.skip}
       </button>
     </div>
   );

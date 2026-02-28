@@ -6,21 +6,35 @@ import { useQuizState } from "@/hooks/use-quiz-state";
 import { QuizQuestion } from "@/components/quiz/quiz-question";
 import { QUIZ_QUESTIONS } from "@/lib/generators/quiz-scorer";
 import { cn } from "@/lib/utils/cn";
+import { useLocale, useMessages } from "@/lib/i18n";
+import { messages as allMessages } from "@/lib/i18n/messages";
 
 export default function Phase2Page() {
   const router = useRouter();
   const { state, setPhase2Answer, setCurrentPhase } = useQuizState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const m = useMessages();
+  const locale = useLocale();
 
   const totalQuestions = QUIZ_QUESTIONS.length;
   const currentQuestion = QUIZ_QUESTIONS[currentIndex];
+
+  // Build localized question for display
+  const quizMessages = allMessages[locale].quiz;
+  const localizedQuestion = {
+    ...currentQuestion,
+    scenario: quizMessages[currentQuestion.id as keyof typeof quizMessages]?.scenario ?? currentQuestion.scenario,
+    options: currentQuestion.options.map((opt, i) => ({
+      ...opt,
+      text: quizMessages[currentQuestion.id as keyof typeof quizMessages]?.options[i] ?? opt.text,
+    })),
+  };
 
   // Restore position based on already-answered questions
   useEffect(() => {
     const answeredCount = Object.keys(state.phase2).length;
     if (answeredCount > 0 && answeredCount < totalQuestions) {
-      // Find the first unanswered question
       const firstUnanswered = QUIZ_QUESTIONS.findIndex(
         (q) => !state.phase2[q.id],
       );
@@ -34,10 +48,7 @@ export default function Phase2Page() {
     (optionId: string) => {
       if (isTransitioning) return;
 
-      // Save answer
       setPhase2Answer(currentQuestion.id, optionId);
-
-      // Auto-advance after 500ms delay
       setIsTransitioning(true);
 
       setTimeout(() => {
@@ -45,7 +56,6 @@ export default function Phase2Page() {
           setCurrentIndex((prev) => prev + 1);
           setIsTransitioning(false);
         } else {
-          // All questions answered -> go to phase 3
           setCurrentPhase(3);
           router.push("/create/phase-3");
         }
@@ -88,7 +98,7 @@ export default function Phase2Page() {
         )}
       >
         <QuizQuestion
-          question={currentQuestion}
+          question={localizedQuestion}
           questionNumber={currentIndex + 1}
           totalQuestions={totalQuestions}
           selectedOptionId={state.phase2[currentQuestion.id]}
@@ -98,7 +108,7 @@ export default function Phase2Page() {
 
       {/* Hint */}
       <p className="font-pixel text-[8px] text-text-secondary text-center">
-        {"선택하면 자동으로 다음 질문으로 넘어갑니다"}
+        {m.phase2.autoAdvanceHint}
       </p>
     </div>
   );

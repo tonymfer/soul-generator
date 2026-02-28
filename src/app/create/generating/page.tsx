@@ -5,15 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQuizState } from "@/hooks/use-quiz-state";
 import { LoadingSpinner, Sparkle, PixelButton } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
-
-const LOADING_MESSAGES = [
-  "소울을 분석하고 있어요...",
-  "MBTI를 해석하는 중...",
-  "성격 특성을 조합하고 있어요...",
-  "당신만의 에이전트를 만드는 중...",
-  "소울에 생명을 불어넣고 있어요...",
-  "거의 다 됐어요!",
-];
+import { useMessages } from "@/lib/i18n";
 
 export default function GeneratingPage() {
   const router = useRouter();
@@ -22,15 +14,18 @@ export default function GeneratingPage() {
   const [error, setError] = useState<string | null>(null);
   const hasStarted = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const m = useMessages();
+
+  const loadingMessages = m.generating.messages;
 
   // Rotate through loading messages
   useEffect(() => {
     if (error) return;
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
+      setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
     }, 2500);
     return () => clearInterval(interval);
-  }, [error]);
+  }, [error, loadingMessages.length]);
 
   // Trigger generation on mount
   useEffect(() => {
@@ -39,7 +34,6 @@ export default function GeneratingPage() {
 
     const input = getFullInput();
 
-    // Guard: if no quiz data, redirect back
     if (!input.soulName || !input.soulName.trim()) {
       router.replace("/create");
       return;
@@ -48,7 +42,6 @@ export default function GeneratingPage() {
     generateSoul(input);
 
     return () => {
-      // Abort in-flight request on unmount
       abortControllerRef.current?.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,7 +50,6 @@ export default function GeneratingPage() {
   async function generateSoul(input: ReturnType<typeof getFullInput>) {
     setError(null);
 
-    // Abort any in-flight request before starting a new one
     abortControllerRef.current?.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -76,7 +68,6 @@ export default function GeneratingPage() {
       });
 
       if (!response.ok) {
-        // On 401 (not authenticated), redirect to home where login is available
         if (response.status === 401) {
           router.replace("/");
           return;
@@ -84,20 +75,15 @@ export default function GeneratingPage() {
 
         const data = await response.json().catch(() => null);
         const message =
-          data?.error ?? `서버 오류가 발생했습니다. (${response.status})`;
+          data?.error ?? `${m.generating.serverError} (${response.status})`;
 
         throw new Error(message);
       }
 
       const { slug } = await response.json();
-
-      // Clear quiz state after successful generation
       reset();
-
-      // Navigate to the soul page
       router.push(`/soul/${slug}`);
     } catch (err) {
-      // Ignore abort errors — they're expected on retry/unmount
       if (err instanceof DOMException && err.name === "AbortError") {
         return;
       }
@@ -105,7 +91,7 @@ export default function GeneratingPage() {
       const message =
         err instanceof Error
           ? err.message
-          : "소울 생성에 실패했습니다. 다시 시도해주세요.";
+          : m.generating.defaultError;
       setError(message);
     }
   }
@@ -151,14 +137,14 @@ export default function GeneratingPage() {
             variant="primary"
             onClick={handleRetry}
           >
-            {"다시 시도하기"}
+            {m.generating.retry}
           </PixelButton>
           <PixelButton
             size="md"
             variant="ghost"
             onClick={handleGoBack}
           >
-            {"돌아가기"}
+            {m.generating.goBack}
           </PixelButton>
         </div>
       </div>
@@ -168,7 +154,6 @@ export default function GeneratingPage() {
   // Loading state
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-8 animate-fade-in-up">
-      {/* Animated soul icon */}
       <div className="relative w-24 h-24 flex items-center justify-center">
         <span className="text-5xl animate-float" role="img" aria-label="soul">
           {"🔮"}
@@ -177,10 +162,8 @@ export default function GeneratingPage() {
         <Sparkle count={4} color="var(--accent-pink)" className="scale-150" />
       </div>
 
-      {/* Loading spinner */}
       <LoadingSpinner dotCount={4} dotSize={10} />
 
-      {/* Rotating message */}
       <div className="h-8 flex items-center justify-center">
         <p
           key={messageIndex}
@@ -189,13 +172,12 @@ export default function GeneratingPage() {
             "animate-fade-in-up",
           )}
         >
-          {LOADING_MESSAGES[messageIndex]}
+          {loadingMessages[messageIndex]}
         </p>
       </div>
 
-      {/* Subtle note */}
       <p className="font-pixel text-[7px] text-text-secondary text-center mt-4">
-        {"잠시만 기다려주세요..."}
+        {m.generating.pleaseWait}
       </p>
     </div>
   );

@@ -24,7 +24,7 @@ export function AuthButtonClient({ user, profile }: AuthButtonClientProps) {
 
   const handleLogin = () => {
     supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider: "github",
       options: {
         redirectTo: `${window.location.origin}/callback`,
       },

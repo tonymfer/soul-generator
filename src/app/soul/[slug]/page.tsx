@@ -16,6 +16,9 @@ import {
   ShareButtons,
 } from "@/components/soul";
 import { AvatarDisplay } from "@/components/avatar";
+import { LocaleToggle } from "@/components/layout/locale-toggle";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 import type { TraitVector, AIEnhancement } from "@/lib/generators/types";
 
 // ============================================================
@@ -87,6 +90,8 @@ export default async function SoulDetailPage({
   }
 
   const soul = data;
+  const locale = await getLocale();
+  const m = messages[locale];
 
   // Check if current user has liked this soul
   const userLiked = await checkUserLike(soul.id);
@@ -123,9 +128,10 @@ export default async function SoulDetailPage({
             href="/gallery"
             className="font-pixel text-[10px] text-text-secondary hover:text-accent-primary transition-colors"
           >
-            &larr; 갤러리로
+            &larr; {m.soulDetail.toGallery}
           </Link>
           <span className="font-pixel text-xs text-accent-primary">ABTI</span>
+          <LocaleToggle />
         </div>
       </header>
 
@@ -133,7 +139,6 @@ export default async function SoulDetailPage({
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-6 animate-fade-in-up">
         {/* Avatar + Title Section */}
         <section className="flex flex-col items-center text-center space-y-4">
-          {/* Pixel art avatar */}
           <div className="relative">
             <AvatarDisplay
               avatarUrl={soul.avatar_url}
@@ -143,19 +148,16 @@ export default async function SoulDetailPage({
             <Sparkle count={4} color="var(--accent-yellow)" />
           </div>
 
-          {/* Soul title */}
           <h1 className="font-pixel text-lg sm:text-xl text-text-primary leading-relaxed text-balance">
             {soul.title}
           </h1>
 
-          {/* Tagline */}
           {soul.tagline && (
             <p className="font-pixel-accent text-sm text-text-secondary max-w-md">
               {soul.tagline}
             </p>
           )}
 
-          {/* Tags */}
           {soul.tags && soul.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 justify-center">
               {mbtiInfo && (
@@ -171,15 +173,13 @@ export default async function SoulDetailPage({
             </div>
           )}
 
-          {/* Stats */}
           <div className="flex gap-4 text-[9px] font-pixel text-text-secondary">
-            <span>조회 {soul.views_count}</span>
-            <span>좋아요 {soul.likes_count}</span>
-            <span>포크 {soul.forks_count}</span>
+            <span>{m.common.views} {soul.views_count}</span>
+            <span>{m.common.likes} {soul.likes_count}</span>
+            <span>{m.common.forks} {soul.forks_count}</span>
           </div>
         </section>
 
-        {/* Personality Traits */}
         {traitVector && (
           <section>
             <TraitDisplay
@@ -189,28 +189,24 @@ export default async function SoulDetailPage({
           </section>
         )}
 
-        {/* SOUL.md */}
         {soul.soul_md && (
           <section>
             <SoulMdViewer soulMd={soul.soul_md} />
           </section>
         )}
 
-        {/* System Prompt */}
         {soul.system_prompt && (
           <section>
             <SystemPromptViewer systemPrompt={soul.system_prompt} />
           </section>
         )}
 
-        {/* Sample Conversations */}
         {sampleConversations.length > 0 && (
           <section>
             <SampleConversations conversations={sampleConversations} />
           </section>
         )}
 
-        {/* Action Buttons */}
         <section className="py-4 space-y-4">
           <SoulActions
             systemPrompt={soul.system_prompt ?? ""}
@@ -222,8 +218,6 @@ export default async function SoulDetailPage({
             title={soul.title}
             forksCount={soul.forks_count}
           />
-
-          {/* SNS Share Buttons */}
           <ShareButtons title={soul.title} slug={soul.slug} />
         </section>
       </main>
@@ -233,16 +227,11 @@ export default async function SoulDetailPage({
 
 // ============================================================
 // Fire-and-forget view count increment
-// Best-effort: uses RPC if available, silently fails otherwise.
-// A proper increment_views RPC with SECURITY DEFINER is
-// recommended for production.
 // ============================================================
 
 async function incrementViews(soulId: string) {
   try {
     const supabase = await createClient();
-    // Best-effort: call RPC via untyped rpc to avoid TS errors
-    // when the function isn't declared in the Database types.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any).rpc("increment_views", { soul_id: soulId });
   } catch {
