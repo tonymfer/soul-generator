@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useQuizState } from "@/hooks/use-quiz-state";
+import { useQuizState, type Phase1Data } from "@/hooks/use-quiz-state";
 import { MBTISelector } from "@/components/quiz/mbti-selector";
 import { TraitSlider } from "@/components/quiz/trait-slider";
 import { PixelButton, PixelCard } from "@/components/ui";
@@ -25,8 +25,8 @@ export default function Phase1Page() {
     setPhase1({ mbti: code });
   };
 
-  const handleADHDToggle = () => {
-    setPhase1({ adhd: !phase1.adhd });
+  const handleADHDChange = (subtype: Phase1Data["adhd"]) => {
+    setPhase1({ adhd: subtype });
   };
 
   const handleTraitChange = (key: keyof typeof phase1.traits, value: number) => {
@@ -53,42 +53,42 @@ export default function Phase1Page() {
         <MBTISelector selected={phase1.mbti} onSelect={handleMBTISelect} />
       </section>
 
-      {/* Section: ADHD */}
+      {/* Section: ADHD Subtype */}
       <section className="flex flex-col gap-3">
-        <h2 className="font-pixel text-xs sm:text-sm text-text-primary">
-          {"ADHD 성향"}
-        </h2>
-        <PixelCard
-          className={cn(
-            "flex items-center justify-between p-4 cursor-pointer transition-all duration-200",
-            phase1.adhd && "bg-accent-pink/10 pixel-border-pink",
-          )}
-          onClick={handleADHDToggle}
-        >
-          <div className="flex flex-col gap-1">
-            <span className="font-pixel text-[10px] text-text-primary">
-              {"ADHD 성향이 있나요?"}
-            </span>
-            <span className="font-pixel text-[8px] text-text-secondary">
-              {"에이전트가 더 활발하고 자유로운 성격이 됩니다"}
-            </span>
-          </div>
-          {/* Toggle */}
-          <div
-            className={cn(
-              "relative w-12 h-6 pixel-border-sm transition-colors duration-200",
-              phase1.adhd ? "bg-accent-pink" : "bg-card-bg",
-            )}
-          >
-            <div
+        <div className="flex flex-col gap-1">
+          <h2 className="font-pixel text-xs sm:text-sm text-text-primary">
+            {"ADHD Subtype"}
+          </h2>
+          <p className="font-pixel text-[8px] text-text-secondary">
+            {"Shapes your agent's energy pattern and focus style"}
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {(
+            [
+              { value: "none", label: "None", desc: "Steady focus" },
+              { value: "inattentive", label: "Inattentive", desc: "Dreamy, tangential" },
+              { value: "hyperactive", label: "Hyperactive", desc: "Burst energy, expressive" },
+              { value: "combined", label: "Combined", desc: "Both traits mixed" },
+            ] as const
+          ).map((opt) => (
+            <PixelCard
+              key={opt.value}
               className={cn(
-                "absolute top-0.5 w-5 h-5 bg-white pixel-border-sm",
-                "transition-all duration-200",
-                phase1.adhd ? "left-[calc(100%-22px)]" : "left-0.5",
+                "flex flex-col gap-1 p-3 cursor-pointer transition-all duration-200",
+                phase1.adhd === opt.value && "bg-accent-pink/10 pixel-border-pink",
               )}
-            />
-          </div>
-        </PixelCard>
+              onClick={() => handleADHDChange(opt.value)}
+            >
+              <span className="font-pixel text-[10px] text-text-primary">
+                {opt.label}
+              </span>
+              <span className="font-pixel text-[7px] text-text-secondary">
+                {opt.desc}
+              </span>
+            </PixelCard>
+          ))}
+        </div>
       </section>
 
       {/* Section: Trait Sliders */}

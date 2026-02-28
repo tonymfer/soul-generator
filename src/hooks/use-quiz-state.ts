@@ -12,7 +12,7 @@ import type { Phase1Input } from "@/lib/generators/types";
 /** Phase 1 data: MBTI selection + ADHD toggle + trait sliders */
 export interface Phase1Data {
   mbti: string;
-  adhd: boolean;
+  adhd: "none" | "inattentive" | "hyperactive" | "combined";
   traits: {
     introversion: number;
     playfulness: number;
@@ -54,7 +54,7 @@ export interface QuizFullInput {
 
 const DEFAULT_PHASE1: Phase1Data = {
   mbti: "",
-  adhd: false,
+  adhd: "none",
   traits: {
     introversion: 0.5,
     playfulness: 0.5,

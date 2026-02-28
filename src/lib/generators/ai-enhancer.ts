@@ -50,7 +50,7 @@ function buildPrompt(freeText: string, traitVector: TraitVector): string {
 
 현재 사용자의 기본 성격 벡터:
 - MBTI: ${traitVector.mbti}
-- ADHD: ${traitVector.adhd}
+- ADHD subtype: ${traitVector.adhd}
 - 소통 스타일: ${traitVector.communication_style}
 - 에너지 패턴: ${traitVector.energy_pattern}
 - 판단 방식: ${traitVector.decision_mode}

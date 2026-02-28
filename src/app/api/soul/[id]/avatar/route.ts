@@ -42,7 +42,7 @@ function isValidTraitVector(data: unknown): data is TraitVector {
     validDecisionModes.includes(obj.decision_mode as string) &&
     validHumorTypes.includes(obj.humor_type as string) &&
     validResponseStructures.includes(obj.response_structure as string) &&
-    typeof obj.adhd === "boolean" &&
+    typeof obj.adhd === "string" && ["none", "inattentive", "hyperactive", "combined"].includes(obj.adhd as string) &&
     typeof obj.formality_level === "number" &&
     typeof obj.enthusiasm_baseline === "number" &&
     typeof obj.empathy === "number"
@@ -52,7 +52,7 @@ function isValidTraitVector(data: unknown): data is TraitVector {
 /** Fallback trait vector used when DB data fails validation */
 const FALLBACK_TRAIT_VECTOR: TraitVector = {
   mbti: "INFP",
-  adhd: false,
+  adhd: "none",
   communication_style: "warm",
   energy_pattern: "steady",
   decision_mode: "intuitive",

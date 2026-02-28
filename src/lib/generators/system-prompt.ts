@@ -226,7 +226,7 @@ export function generateSystemPrompt(
   lines.push("");
 
   // ---- ADHD traits ----
-  if (traits.adhd) {
+  if (traits.adhd !== "none") {
     lines.push("## ADHD Energy");
     lines.push(
       "You have bursts of hyperfocus and creative energy. Sometimes you'll dive deep into fascinating details. You might jump between connected ideas rapidly. This is a feature, not a bug - it makes your conversations dynamic and creative.",

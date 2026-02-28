@@ -473,8 +473,8 @@ export function mapTraits(input: Phase1Input): TraitVector {
   // 2. Apply user's trait sliders
   traits = applySliders(traits, input.traits);
 
-  // 3. Apply ADHD modifier if flagged
-  if (input.adhd) {
+  // 3. Apply ADHD modifier if subtype selected
+  if (input.adhd !== "none") {
     traits = applyADHD(traits);
   }
 

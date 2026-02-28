@@ -6,7 +6,7 @@
 /** The core personality representation - a multi-dimensional vector */
 export interface TraitVector {
   mbti: string; // "INTJ", "ENFP", etc.
-  adhd: boolean;
+  adhd: "none" | "inattentive" | "hyperactive" | "combined";
   communication_style: "direct" | "warm" | "analytical" | "expressive";
   energy_pattern: "steady" | "burst" | "reactive" | "ambient";
   decision_mode: "logical" | "intuitive" | "consensus" | "impulsive";
@@ -23,7 +23,7 @@ export interface TraitVector {
 /** Phase 1 input: MBTI type + slider traits from the user */
 export interface Phase1Input {
   mbti: string;
-  adhd: boolean;
+  adhd: "none" | "inattentive" | "hyperactive" | "combined";
   traits: {
     introversion: number; // 0-1
     playfulness: number; // 0-1

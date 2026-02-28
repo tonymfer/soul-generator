@@ -28,7 +28,7 @@ export interface AvatarConfig {
   bgPattern: BgPattern;
   palette: AvatarPalette;
   /** Adds sparkle particles around the character */
-  adhd: boolean;
+  adhd: "none" | "inattentive" | "hyperactive" | "combined";
   /** 0-1, adds rosy cheeks when high */
   enthusiasm: number;
   /** 0-1, adds blush marks when high */
@@ -146,7 +146,7 @@ export function composeSvg(config: AvatarConfig): string {
   layers.push(getTopAccessory(config.topAccessory, palette));
 
   // 8. ADHD sparkles
-  if (config.adhd) {
+  if (config.adhd !== "none") {
     layers.push(adhdSparkles(palette));
   }
 

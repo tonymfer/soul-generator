@@ -3,7 +3,7 @@ import { mapTraits, MBTI_TRAITS } from "../trait-mapper";
 import type { Phase1Input } from "../types";
 
 // Helper: create a Phase1Input with all sliders at neutral (0.5)
-function neutralInput(mbti: string, adhd: boolean = false): Phase1Input {
+function neutralInput(mbti: string, adhd: Phase1Input["adhd"] = "none"): Phase1Input {
   return {
     mbti,
     adhd,
