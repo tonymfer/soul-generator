@@ -147,7 +147,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
           {souls.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {souls.map((soul) => (
-                <SoulCard key={soul.slug} soul={soul} />
+                <SoulCard key={soul.slug} soul={soul} locale={locale} />
               ))}
             </div>
           ) : (

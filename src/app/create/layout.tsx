@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { QuizProgress } from "@/components/quiz/quiz-progress";
 import { cn } from "@/lib/utils/cn";
+import { useMessages } from "@/lib/i18n";
 
 function getPhaseFromPath(pathname: string): 1 | 2 | 3 {
   if (pathname.includes("phase-3")) return 3;
@@ -25,6 +26,7 @@ export default function CreateLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const m = useMessages();
   const currentPhase = getPhaseFromPath(pathname);
   const showProgress = !isGeneratingPage(pathname) && !isEntryPage(pathname);
   const showBack = !isEntryPage(pathname) && !isGeneratingPage(pathname);
@@ -53,9 +55,9 @@ export default function CreateLayout({
               "hover:text-accent-primary transition-colors duration-200",
               "cursor-pointer",
             )}
-            aria-label="Go back"
+            aria-label={m.create.backAria}
           >
-            &lt; back
+            {m.create.backButton}
           </button>
         )}
 
@@ -72,7 +74,7 @@ export default function CreateLayout({
       )}
 
       {/* Content */}
-      <main className="flex-1 flex flex-col px-4 sm:px-8 pb-8 max-w-2xl mx-auto w-full">
+      <main id="main-content" className="flex-1 flex flex-col px-4 sm:px-8 pb-8 max-w-2xl mx-auto w-full">
         {children}
       </main>
     </div>

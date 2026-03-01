@@ -16,7 +16,7 @@
   --accent-green: #4ade80;
   --accent-red: #f87171;
   --text-primary: #e0e0e0;
-  --text-secondary: #8888a0;
+  --text-secondary: #9999b3;
   --card-bg: #12121e;
   --card-border: #1a1a2e;
 
@@ -76,6 +76,11 @@
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100%); }
+}
+
+@keyframes trait-fill {
+  from { width: 0; }
+  to { width: var(--trait-width); }
 }
 
 /* ============================================
@@ -209,19 +214,19 @@ body {
 .trait-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: var(--accent-primary);
   border: 2px solid var(--text-primary);
   cursor: grab;
-  margin-top: -5px;
+  margin-top: -9px;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
 }
 
 .trait-slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid var(--text-primary);
   background: var(--accent-primary);
@@ -240,4 +245,15 @@ body {
 
 .trait-slider:focus-visible::-webkit-slider-thumb {
   box-shadow: 0 0 0 2px var(--accent-primary), 0 0 12px rgba(124, 110, 246, 0.5);
+}
+
+/* ============================================
+   Reduced motion — disable all animations
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

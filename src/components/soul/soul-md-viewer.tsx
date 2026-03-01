@@ -4,6 +4,7 @@ import { useState, useCallback, type ReactNode } from "react";
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelButton } from "@/components/ui/pixel-button";
 import { ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // Simple markdown renderer — no external libraries
@@ -182,6 +183,7 @@ interface SoulMdViewerProps {
 }
 
 export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
+  const m = useMessages();
   const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -214,12 +216,12 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
           {copied ? (
             <>
               <Check size={12} />
-              <span>복사됨!</span>
+              <span>{m.viewer.copied}</span>
             </>
           ) : (
             <>
               <Copy size={12} />
-              <span>복사</span>
+              <span>{m.viewer.copy}</span>
             </>
           )}
         </PixelButton>
@@ -243,12 +245,12 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
           {isExpanded ? (
             <>
               <ChevronUp size={12} />
-              <span>접기</span>
+              <span>{m.viewer.collapse}</span>
             </>
           ) : (
             <>
               <ChevronDown size={12} />
-              <span>전체 SOUL.md 보기</span>
+              <span>{m.viewer.viewFullSoulMd}</span>
             </>
           )}
         </PixelButton>

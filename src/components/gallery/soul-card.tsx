@@ -3,6 +3,8 @@ import { Heart, GitFork } from "lucide-react";
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelBadge } from "@/components/ui/pixel-badge";
 import { AvatarDisplay } from "@/components/avatar";
+import { messages } from "@/lib/i18n/messages";
+import type { Locale } from "@/lib/i18n/get-locale";
 import type { Soul } from "@/lib/supabase/types";
 import type { TraitVector } from "@/lib/generators/types";
 
@@ -23,28 +25,30 @@ interface SoulCardProps {
     | "personality_data"
     | "created_at"
   >;
+  locale?: Locale;
 }
 
-/** Format relative time in Korean */
-function relativeTimeKo(dateStr: string): string {
+/** Format relative time based on locale */
+function relativeTime(dateStr: string, locale: Locale = "en"): string {
+  const m = messages[locale].common;
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffSec = Math.floor((now - then) / 1000);
 
-  if (diffSec < 60) return "방금 전";
+  if (diffSec < 60) return m.justNow;
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffMin < 60) return m.minutesAgo(diffMin);
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}시간 전`;
+  if (diffHr < 24) return m.hoursAgo(diffHr);
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `${diffDay}일 전`;
+  if (diffDay < 30) return m.daysAgo(diffDay);
   const diffMon = Math.floor(diffDay / 30);
-  if (diffMon < 12) return `${diffMon}개월 전`;
+  if (diffMon < 12) return m.monthsAgo(diffMon);
   const diffYr = Math.floor(diffMon / 12);
-  return `${diffYr}년 전`;
+  return m.yearsAgo(diffYr);
 }
 
-export function SoulCard({ soul }: SoulCardProps) {
+export function SoulCard({ soul, locale = "en" }: SoulCardProps) {
   // Extract traitVector from personality_data for avatar fallback
   const rawPersonality = soul.personality_data as Record<string, unknown> | null;
   const traitVector = rawPersonality?.traitVector
@@ -57,7 +61,7 @@ export function SoulCard({ soul }: SoulCardProps) {
   return (
     <Link href={`/soul/${soul.slug}`} className="block group">
       <PixelCard
-        className="h-full p-4 transition-all duration-200 group-hover:glow-purple group-hover:-translate-y-0.5"
+        className="h-full p-4 transition-all duration-200 group-hover:glow-purple group-hover:-translate-y-1"
       >
         <div className="flex flex-col items-center text-center gap-3">
           {/* Avatar */}
@@ -100,7 +104,7 @@ export function SoulCard({ soul }: SoulCardProps) {
               <GitFork size={10} />
               {soul.forks_count}
             </span>
-            <span>{relativeTimeKo(soul.created_at)}</span>
+            <span>{relativeTime(soul.created_at, locale)}</span>
           </div>
         </div>
       </PixelCard>

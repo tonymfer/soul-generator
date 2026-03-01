@@ -121,7 +121,7 @@ export function GalleryFilters() {
         </select>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide flex-nowrap [mask-image:linear-gradient(to_right,transparent_0,black_8px,black_calc(100%-8px),transparent_100%)]">
         {MBTI_CODES.map((code) => {
           const isActive = currentMbti === code;
           return (

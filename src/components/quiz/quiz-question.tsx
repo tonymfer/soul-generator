@@ -51,7 +51,7 @@ function QuizQuestion({
               type="button"
               onClick={() => onSelect(option.id)}
               className={cn(
-                "w-full p-4 text-left",
+                "w-full p-4 text-left min-h-[44px]",
                 "bg-card-bg pixel-border-sm cursor-pointer",
                 "transition-all duration-200 ease-out",
                 "hover:scale-[1.01] hover:brightness-105",
@@ -60,7 +60,8 @@ function QuizQuestion({
                 isSelected && [
                   "pixel-border-accent",
                   "bg-accent-primary/10",
-                  "scale-[1.01]",
+                  "scale-[1.02]",
+                  "ring-2 ring-accent-primary/50",
                   "glow-purple",
                 ],
               )}

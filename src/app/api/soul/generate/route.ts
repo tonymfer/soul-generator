@@ -104,7 +104,7 @@ async function insertSoulWithUniqueSlug(
 
   // Extremely unlikely: 100+ collisions
   console.error("[generate] Exhausted slug retry attempts for:", soulName);
-  return { error: "소울 생성에 실패했습니다. 다시 시도해주세요.", status: 500 };
+  return { error: messages[locale].api.generationFailed, status: 500 };
 }
 
 // ---------------------------------------------------------------------------

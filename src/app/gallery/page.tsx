@@ -99,7 +99,7 @@ export default async function GalleryPage({ searchParams }: PageProps) {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-fade-in-up">
+      <main id="main-content" className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-fade-in-up">
         <section className="text-center space-y-2">
           <div className="relative inline-block">
             <h1 className="font-pixel text-lg sm:text-xl text-text-primary">
@@ -122,7 +122,7 @@ export default async function GalleryPage({ searchParams }: PageProps) {
           {souls && souls.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {souls.map((soul) => (
-                <SoulCard key={soul.slug} soul={soul} />
+                <SoulCard key={soul.slug} soul={soul} locale={locale} />
               ))}
             </div>
           ) : (

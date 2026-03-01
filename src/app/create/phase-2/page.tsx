@@ -92,6 +92,7 @@ export default function Phase2Page() {
       {/* Question card */}
       <div
         key={currentQuestion.id}
+        aria-live="polite"
         className={cn(
           "animate-fade-in-up",
           isTransitioning && "opacity-50 pointer-events-none",

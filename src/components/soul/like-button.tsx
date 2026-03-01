@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Heart } from "lucide-react";
 import { PixelButton } from "@/components/ui/pixel-button";
 import { toggleLike } from "@/actions/like";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // LikeButton — real like toggle with optimistic UI
@@ -20,6 +21,7 @@ export function LikeButton({
   initialLiked,
   initialCount,
 }: LikeButtonProps) {
+  const m = useMessages();
   const [liked, setLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
   const [isPending, startTransition] = useTransition();
@@ -61,7 +63,7 @@ export function LikeButton({
         fill={liked ? "currentColor" : "none"}
         className={liked ? "animate-bounce-pixel" : ""}
       />
-      <span>좋아요 {count}</span>
+      <span>{m.common.like} {count}</span>
     </PixelButton>
   );
 }

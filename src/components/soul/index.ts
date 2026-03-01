@@ -7,3 +7,4 @@ export { LikeButton } from "./like-button";
 export { ForkButton } from "./fork-button";
 export { ExportMenu } from "./export-menu";
 export { ShareButtons } from "./share-buttons";
+export { ShareCard } from "./share-card";

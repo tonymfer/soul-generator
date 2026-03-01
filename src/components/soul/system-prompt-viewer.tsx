@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelButton } from "@/components/ui/pixel-button";
 import { ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
+import { useMessages } from "@/lib/i18n";
 
 // ============================================================
 // SystemPromptViewer — displays system prompt with copy & collapse
@@ -14,6 +15,7 @@ interface SystemPromptViewerProps {
 }
 
 export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
+  const m = useMessages();
   const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -39,7 +41,7 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
     <PixelCard className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="font-pixel text-sm text-accent-primary">
-          시스템 프롬프트
+          {m.viewer.systemPromptTitle}
         </h2>
         <PixelButton
           variant="ghost"
@@ -50,12 +52,12 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
           {copied ? (
             <>
               <Check size={12} />
-              <span>복사됨!</span>
+              <span>{m.viewer.copied}</span>
             </>
           ) : (
             <>
               <Copy size={12} />
-              <span>복사</span>
+              <span>{m.viewer.copy}</span>
             </>
           )}
         </PixelButton>
@@ -81,12 +83,12 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
           {isExpanded ? (
             <>
               <ChevronUp size={12} />
-              <span>접기</span>
+              <span>{m.viewer.collapse}</span>
             </>
           ) : (
             <>
               <ChevronDown size={12} />
-              <span>전체 프롬프트 보기</span>
+              <span>{m.viewer.viewFullPrompt}</span>
             </>
           )}
         </PixelButton>

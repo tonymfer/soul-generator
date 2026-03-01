@@ -1,23 +1,26 @@
 "use client";
 
 import { cn } from "@/lib/utils/cn";
+import { useMessages } from "@/lib/i18n";
 
 interface QuizProgressProps {
   currentPhase: 1 | 2 | 3;
   className?: string;
 }
 
-const PHASES = [
-  { phase: 1, label: "기본 설정" },
-  { phase: 2, label: "성격 퀴즈" },
-  { phase: 3, label: "마지막 터치" },
-] as const;
-
 /**
  * Progress bar across all 3 quiz phases.
  * Shows labels with current phase highlighted, completed phases with checkmark.
  */
 function QuizProgress({ currentPhase, className }: QuizProgressProps) {
+  const m = useMessages();
+
+  const phases = [
+    { phase: 1 as const, label: m.quizProgress.phase1 },
+    { phase: 2 as const, label: m.quizProgress.phase2 },
+    { phase: 3 as const, label: m.quizProgress.phase3 },
+  ];
+
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       {/* Progress bar track */}
@@ -41,7 +44,7 @@ function QuizProgress({ currentPhase, className }: QuizProgressProps) {
 
       {/* Phase labels */}
       <div className="flex items-center justify-between">
-        {PHASES.map(({ phase, label }) => {
+        {phases.map(({ phase, label }) => {
           const isCompleted = phase < currentPhase;
           const isCurrent = phase === currentPhase;
 

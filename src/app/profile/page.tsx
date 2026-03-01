@@ -138,7 +138,7 @@ export default async function MyProfilePage() {
                       <PixelBadge variant="default">{m.common.private}</PixelBadge>
                     </div>
                   )}
-                  <SoulCard soul={soul} />
+                  <SoulCard soul={soul} locale={locale} />
                 </div>
               ))}
             </div>

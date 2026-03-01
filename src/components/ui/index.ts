@@ -32,3 +32,6 @@ export type { SparkleProps } from "./sparkle";
 
 export { LoadingSpinner } from "./loading-spinner";
 export type { LoadingSpinnerProps } from "./loading-spinner";
+
+export { PixelIcon } from "./pixel-icon";
+export type { PixelIconProps } from "./pixel-icon";

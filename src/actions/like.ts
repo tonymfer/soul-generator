@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { messages } from "@/lib/i18n/messages";
 
 // ============================================================
 // Like Server Actions — toggle & check likes via Supabase
@@ -17,9 +19,12 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export async function toggleLike(
   soulId: string
 ): Promise<{ liked: boolean; likesCount: number; error?: string }> {
+  const locale = await getLocale();
+  const m = messages[locale].api;
+
   // Validate soulId format
   if (!UUID_RE.test(soulId)) {
-    return { liked: false, likesCount: 0, error: "잘못된 소울 ID입니다." };
+    return { liked: false, likesCount: 0, error: m.invalidSoulId };
   }
 
   const supabase = await createClient();
@@ -30,7 +35,7 @@ export async function toggleLike(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { liked: false, likesCount: 0, error: "로그인이 필요합니다" };
+    return { liked: false, likesCount: 0, error: m.loginRequired };
   }
 
   // Verify the soul exists and is public before allowing the like
@@ -42,7 +47,7 @@ export async function toggleLike(
     .maybeSingle();
 
   if (!targetSoul) {
-    return { liked: false, likesCount: 0, error: "소울을 찾을 수 없습니다." };
+    return { liked: false, likesCount: 0, error: m.soulNotFound };
   }
 
   // Try to insert (optimistic: assume user wants to like)

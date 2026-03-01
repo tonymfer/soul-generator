@@ -2,7 +2,9 @@
 
 import { PixelCard } from "@/components/ui/pixel-card";
 import { PixelBadge } from "@/components/ui/pixel-badge";
+import { PixelIcon } from "@/components/ui/pixel-icon";
 import { getMBTIType } from "@/lib/constants/mbti";
+import { MBTI_ICONS } from "@/lib/constants/mbti-icons";
 import { useLocale, useMessages } from "@/lib/i18n";
 import type { TraitVector, AIEnhancement } from "@/lib/generators/types";
 
@@ -16,12 +18,12 @@ function TraitBar({ label, value }: { label: string; value: number }) {
     <div className="flex flex-col gap-1">
       <div className="flex justify-between items-center">
         <span className="font-pixel-accent text-[11px] text-text-primary">{label}</span>
-        <span className="font-pixel text-[8px] text-text-secondary">{percentage}%</span>
+        <span className="font-pixel text-[10px] text-text-secondary">{percentage}%</span>
       </div>
       <div className="h-3 w-full bg-card-border pixel-border-sm relative overflow-hidden">
         <div
-          className="h-full bg-accent-primary transition-all duration-500"
-          style={{ width: `${percentage}%` }}
+          className="h-full bg-accent-primary animate-[trait-fill_0.8s_ease-out_forwards]"
+          style={{ "--trait-width": `${percentage}%` } as React.CSSProperties}
         />
       </div>
     </div>
@@ -66,7 +68,14 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
       {mbtiInfo && (
         <div className="flex items-center gap-3">
           <PixelBadge variant="purple" className="text-[10px]">
-            {mbtiInfo.emoji} {mbtiInfo.code}
+            {MBTI_ICONS[mbtiInfo.code] ? (
+              <svg viewBox="0 0 16 16" width={14} height={14} className="inline-block mr-1" aria-hidden="true">
+                {MBTI_ICONS[mbtiInfo.code]}
+              </svg>
+            ) : (
+              <span className="mr-1">{mbtiInfo.emoji}</span>
+            )}
+            {mbtiInfo.code}
           </PixelBadge>
           <span className="font-pixel-accent text-xs text-text-secondary">
             {locale === "ko" ? mbtiInfo.nameKo : mbtiInfo.nameEn}
@@ -82,31 +91,31 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[8px] text-text-secondary uppercase">{m.traits.communicationStyle}</span>
+          <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.communicationStyle}</span>
           <PixelBadge variant="mint">
             {commLabels[traitVector.communication_style] ?? traitVector.communication_style}
           </PixelBadge>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[8px] text-text-secondary uppercase">{m.traits.energyPattern}</span>
+          <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.energyPattern}</span>
           <PixelBadge variant="pink">
             {energyLabels[traitVector.energy_pattern] ?? traitVector.energy_pattern}
           </PixelBadge>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[8px] text-text-secondary uppercase">{m.traits.decisionMode}</span>
+          <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.decisionMode}</span>
           <PixelBadge variant="purple">
             {decisionLabels[traitVector.decision_mode] ?? traitVector.decision_mode}
           </PixelBadge>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[8px] text-text-secondary uppercase">{m.traits.humorType}</span>
+          <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.humorType}</span>
           <PixelBadge variant="yellow">
             {humorLabels[traitVector.humor_type] ?? traitVector.humor_type}
           </PixelBadge>
         </div>
         <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[8px] text-text-secondary uppercase">{m.traits.responseStructure}</span>
+          <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.responseStructure}</span>
           <PixelBadge variant="default">
             {structureLabels[traitVector.response_structure] ?? traitVector.response_structure}
           </PixelBadge>
@@ -129,7 +138,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
           {aiEnhancement.speaking_quirks.length > 0 && (
             <div className="space-y-1">
-              <span className="font-pixel text-[8px] text-text-secondary uppercase">
+              <span className="font-pixel text-[9px] text-text-secondary uppercase">
                 {m.traits.speakingQuirks}
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -144,7 +153,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
           {aiEnhancement.catchphrases.length > 0 && (
             <div className="space-y-1">
-              <span className="font-pixel text-[8px] text-text-secondary uppercase">
+              <span className="font-pixel text-[9px] text-text-secondary uppercase">
                 {m.traits.catchphrases}
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -159,7 +168,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
           {aiEnhancement.interests.length > 0 && (
             <div className="space-y-1">
-              <span className="font-pixel text-[8px] text-text-secondary uppercase">
+              <span className="font-pixel text-[9px] text-text-secondary uppercase">
                 {m.traits.interests}
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -174,7 +183,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
           {aiEnhancement.pet_peeves.length > 0 && (
             <div className="space-y-1">
-              <span className="font-pixel text-[8px] text-text-secondary uppercase">
+              <span className="font-pixel text-[9px] text-text-secondary uppercase">
                 {m.traits.petPeeves}
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -189,7 +198,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
 
           {aiEnhancement.unique_perspective && (
             <div className="space-y-1">
-              <span className="font-pixel text-[8px] text-text-secondary uppercase">
+              <span className="font-pixel text-[9px] text-text-secondary uppercase">
                 {m.traits.uniquePerspective}
               </span>
               <p className="font-pixel-accent text-xs text-text-primary leading-relaxed">

@@ -22,6 +22,13 @@ const en = {
     count: "",
     joinDate: "Joined:",
     private: "Private",
+    like: "Like",
+    justNow: "just now",
+    minutesAgo: (n: number) => `${n}m ago`,
+    hoursAgo: (n: number) => `${n}h ago`,
+    daysAgo: (n: number) => `${n}d ago`,
+    monthsAgo: (n: number) => `${n}mo ago`,
+    yearsAgo: (n: number) => `${n}y ago`,
   },
 
   // ── Metadata ──
@@ -67,6 +74,9 @@ const en = {
     feature4Desc: "Cute pixel avatar matching your personality",
     galleryPreview: "Soul Gallery Preview",
     galleryMore: "See More Gallery",
+    socialProof: (count: number) => `${count} souls created`,
+    quizHook: "3 min quiz. Infinite personality.",
+    trendingTitle: "Trending Souls",
   },
 
   // ── Create Flow ──
@@ -83,6 +93,8 @@ const en = {
     step3Desc: "Free text + naming",
     startButton: "Get Started",
     timeEstimate: "Takes about 3-5 min",
+    backButton: "< back",
+    backAria: "Go to previous step",
   },
 
   // ── Phase 1 ──
@@ -251,6 +263,13 @@ const en = {
     conversation: "Conversation",
   },
 
+  // ── Share Card ──
+  shareCard: {
+    title: "Share Your Soul",
+    saveImage: "Save as Image",
+    shareText: (mbti: string) => `I'm a ${mbti} soul! What's your ABTI?`,
+  },
+
   // ── Share Buttons ──
   shareButtons: {
     shareText: "- Check out my ABTI soul!",
@@ -267,6 +286,23 @@ const en = {
     copySoulMd: "Copy SOUL.md",
     copied: "Copied!",
     share: "Share",
+  },
+
+  // ── Viewers ──
+  viewer: {
+    systemPromptTitle: "System Prompt",
+    copy: "Copy",
+    copied: "Copied!",
+    collapse: "Collapse",
+    viewFullSoulMd: "View Full SOUL.md",
+    viewFullPrompt: "View Full Prompt",
+  },
+
+  // ── Quiz Progress ──
+  quizProgress: {
+    phase1: "Basic Setup",
+    phase2: "Personality Quiz",
+    phase3: "Final Touch",
   },
 
   // ── Export Menu ──
@@ -356,6 +392,15 @@ const en = {
     loginRequired: "Login required.",
     generationFailed: "Soul generation failed. Please try again.",
     serverError: "Server error occurred. Please try again later.",
+    invalidSoulId: "Invalid soul ID.",
+    soulNotFound: "Soul not found.",
+  },
+
+  // ── Profile Errors (server actions) ──
+  profileErrors: {
+    loginRequired: "Login required.",
+    displayNameLimit: "Display name must be 50 characters or less.",
+    updateFailed: "Failed to update profile.",
   },
 
   // ── Tagline Labels ──
@@ -408,6 +453,13 @@ const ko: MessagesShape = {
     count: "\uAC1C",
     joinDate: "\uAC00\uC785\uC77C:",
     private: "\uBE44\uACF5\uAC1C",
+    like: "\uC88B\uC544\uC694",
+    justNow: "\uBC29\uAE08 \uC804",
+    minutesAgo: (n: number) => `${n}\uBD84 \uC804`,
+    hoursAgo: (n: number) => `${n}\uC2DC\uAC04 \uC804`,
+    daysAgo: (n: number) => `${n}\uC77C \uC804`,
+    monthsAgo: (n: number) => `${n}\uAC1C\uC6D4 \uC804`,
+    yearsAgo: (n: number) => `${n}\uB144 \uC804`,
   },
 
   meta: {
@@ -451,6 +503,9 @@ const ko: MessagesShape = {
     feature4Desc: "\uC131\uACA9\uC5D0 \uB9DE\uB294 \uADC0\uC5EC\uC6B4 \uD53D\uC140 \uC544\uBC14\uD0C0",
     galleryPreview: "\uC18C\uC6B8 \uAC24\uB7EC\uB9AC \uBBF8\uB9AC\uBCF4\uAE30",
     galleryMore: "\uAC24\uB7EC\uB9AC \uB354 \uBCF4\uAE30",
+    socialProof: (count: number) => `${count}개의 소울이 탄생했어요`,
+    quizHook: "3분 퀴즈. 무한한 개성.",
+    trendingTitle: "인기 소울",
   },
 
   create: {
@@ -466,6 +521,8 @@ const ko: MessagesShape = {
     step3Desc: "\uC790\uC720 \uD14D\uC2A4\uD2B8 + \uC774\uB984 \uC9D3\uAE30",
     startButton: "\uC2DC\uC791\uD558\uAE30",
     timeEstimate: "\uC57D 3~5\uBD84 \uC18C\uC694",
+    backButton: "< \uB4A4\uB85C",
+    backAria: "\uC774\uC804 \uB2E8\uACC4\uB85C",
   },
 
   phase1: {
@@ -624,6 +681,12 @@ const ko: MessagesShape = {
     conversation: "\uB300\uD654",
   },
 
+  shareCard: {
+    title: "나의 소울 공유하기",
+    saveImage: "이미지로 저장",
+    shareText: (mbti: string) => `나는 ${mbti} 소울! 너의 ABTI는?`,
+  },
+
   shareButtons: {
     shareText: "- \uB098\uC758 ABTI \uC18C\uC6B8\uC744 \uD655\uC778\uD574\uBCF4\uC138\uC694!",
     shareOnX: "X(Twitter)\uC5D0 \uACF5\uC720",
@@ -638,6 +701,21 @@ const ko: MessagesShape = {
     copySoulMd: "SOUL.md \uBCF5\uC0AC",
     copied: "\uBCF5\uC0AC\uB428!",
     share: "\uACF5\uC720\uD558\uAE30",
+  },
+
+  viewer: {
+    systemPromptTitle: "\uC2DC\uC2A4\uD15C \uD504\uB86C\uD504\uD2B8",
+    copy: "\uBCF5\uC0AC",
+    copied: "\uBCF5\uC0AC\uB428!",
+    collapse: "\uC811\uAE30",
+    viewFullSoulMd: "\uC804\uCCB4 SOUL.md \uBCF4\uAE30",
+    viewFullPrompt: "\uC804\uCCB4 \uD504\uB86C\uD504\uD2B8 \uBCF4\uAE30",
+  },
+
+  quizProgress: {
+    phase1: "\uAE30\uBCF8 \uC124\uC815",
+    phase2: "\uC131\uACA9 \uD034\uC988",
+    phase3: "\uB9C8\uC9C0\uB9C9 \uD130\uCE58",
   },
 
   exportMenu: {
@@ -721,6 +799,14 @@ const ko: MessagesShape = {
     loginRequired: "\uB85C\uADF8\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.",
     generationFailed: "\uC18C\uC6B8 \uC0DD\uC131\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.",
     serverError: "\uC11C\uBC84 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574\uC8FC\uC138\uC694.",
+    invalidSoulId: "\uC798\uBABB\uB41C \uC18C\uC6B8 ID\uC785\uB2C8\uB2E4.",
+    soulNotFound: "\uC18C\uC6B8\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.",
+  },
+
+  profileErrors: {
+    loginRequired: "\uB85C\uADF8\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.",
+    displayNameLimit: "\uD45C\uC2DC \uC774\uB984\uC740 50\uC790 \uC774\uB0B4\uB85C \uC785\uB825\uD574\uC8FC\uC138\uC694.",
+    updateFailed: "\uD504\uB85C\uD544 \uC5C5\uB370\uC774\uD2B8\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4.",
   },
 
   tagline: {

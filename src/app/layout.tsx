@@ -64,6 +64,12 @@ export default async function RootLayout({
       <body
         className={`${pressStart2P.variable} ${jetbrainsMono.variable} min-h-screen bg-bg-primary text-text-primary font-mono antialiased`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-primary focus:text-white focus:font-pixel focus:text-xs"
+        >
+          Skip to content
+        </a>
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
       </body>
     </html>

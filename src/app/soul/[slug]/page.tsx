@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { checkUserLike } from "@/actions/like";
 import { getMBTIType } from "@/lib/constants/mbti";
 import { PixelBadge } from "@/components/ui/pixel-badge";
+import { MBTI_ICONS } from "@/lib/constants/mbti-icons";
 import { Sparkle } from "@/components/ui/sparkle";
 import {
   TraitDisplay,
@@ -14,6 +15,7 @@ import {
   SampleConversations,
   SoulActions,
   ShareButtons,
+  ShareCard,
 } from "@/components/soul";
 import { AvatarDisplay } from "@/components/avatar";
 import { LocaleToggle } from "@/components/layout/locale-toggle";
@@ -136,7 +138,7 @@ export default async function SoulDetailPage({
       </header>
 
       {/* Content */}
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-6 animate-fade-in-up">
+      <main id="main-content" className="max-w-2xl mx-auto px-4 py-8 space-y-6 animate-fade-in-up">
         {/* Avatar + Title Section */}
         <section className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
@@ -162,7 +164,14 @@ export default async function SoulDetailPage({
             <div className="flex flex-wrap gap-2 justify-center">
               {mbtiInfo && (
                 <PixelBadge variant="purple">
-                  {mbtiInfo.emoji} {mbtiInfo.code}
+                  {MBTI_ICONS[mbtiInfo.code] ? (
+                    <svg viewBox="0 0 16 16" width={14} height={14} className="inline-block mr-1" aria-hidden="true">
+                      {MBTI_ICONS[mbtiInfo.code]}
+                    </svg>
+                  ) : (
+                    <span className="mr-1">{mbtiInfo.emoji}</span>
+                  )}
+                  {mbtiInfo.code}
                 </PixelBadge>
               )}
               {soul.tags.map((tag) => (
@@ -219,6 +228,17 @@ export default async function SoulDetailPage({
             forksCount={soul.forks_count}
           />
           <ShareButtons title={soul.title} slug={soul.slug} />
+        </section>
+
+        <section>
+          <ShareCard
+            title={soul.title}
+            tagline={soul.tagline}
+            mbtiCode={mbtiInfo?.code}
+            mbtiEmoji={mbtiInfo?.emoji}
+            tags={soul.tags ?? []}
+            avatarUrl={soul.avatar_url}
+          />
         </section>
       </main>
     </div>
