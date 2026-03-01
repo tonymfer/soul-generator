@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useQuizState } from "@/hooks/use-quiz-state";
-import { PixelButton, PixelCard, PixelInput } from "@/components/ui";
+import { TerminalButton, TerminalCard, TerminalInput } from "@/components/ui";
 import { cn } from "@/lib/utils/cn";
 import { useMessages } from "@/lib/i18n";
 
@@ -15,8 +15,7 @@ export default function Phase3Page() {
   const m = useMessages();
 
   const handleFreeTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value.slice(0, MAX_FREETEXT_LENGTH);
-    setPhase3({ freeText: value });
+    setPhase3({ freeText: e.target.value.slice(0, MAX_FREETEXT_LENGTH) });
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,93 +31,66 @@ export default function Phase3Page() {
 
   return (
     <div className="flex flex-col gap-8 animate-fade-in-up">
-      {/* Title section */}
       <div className="flex flex-col gap-2 text-center">
-        <h2 className="font-pixel text-xs sm:text-sm text-text-primary leading-relaxed">
-          {m.phase3.title1}
-          <br />
-          {m.phase3.title2}
+        <h2 className="text-sm text-text-primary leading-relaxed">
+          {m.phase3.title1}<br />{m.phase3.title2}
         </h2>
-        <p className="font-pixel text-[8px] sm:text-[9px] text-text-secondary">
-          {m.phase3.subtitle}
-        </p>
+        <p className="text-xs text-text-secondary">{m.phase3.subtitle}</p>
       </div>
 
-      {/* Free text area */}
-      <PixelCard className="flex flex-col gap-3 p-5">
-        <label
-          htmlFor="free-text"
-          className="font-pixel text-[9px] text-text-secondary uppercase tracking-wider"
-        >
-          {m.phase3.freeTextLabel}
-        </label>
-        <textarea
-          id="free-text"
-          value={phase3.freeText}
-          onChange={handleFreeTextChange}
-          maxLength={MAX_FREETEXT_LENGTH}
-          rows={5}
-          placeholder={m.phase3.freeTextPlaceholder}
-          className={cn(
-            "w-full px-4 py-3 font-pixel text-[10px] leading-5",
-            "bg-bg-primary text-text-primary",
-            "placeholder:text-text-secondary/40",
-            "pixel-border-sm resize-none",
-            "outline-none transition-shadow duration-200",
-            "focus:pixel-border-accent focus:glow-purple",
-          )}
-        />
-        <div className="flex justify-end">
-          <span
+      <TerminalCard title="enhancement" className="!p-5">
+        <div className="flex flex-col gap-3">
+          <label htmlFor="free-text" className="text-xs text-text-secondary tracking-wider">
+            {m.phase3.freeTextLabel}
+          </label>
+          <textarea
+            id="free-text"
+            value={phase3.freeText}
+            onChange={handleFreeTextChange}
+            maxLength={MAX_FREETEXT_LENGTH}
+            rows={5}
+            placeholder={m.phase3.freeTextPlaceholder}
             className={cn(
-              "font-pixel text-[8px]",
-              phase3.freeText.length >= MAX_FREETEXT_LENGTH
-                ? "text-accent-pink"
-                : "text-text-secondary",
+              "w-full px-4 py-3 text-sm leading-5",
+              "bg-bg-primary text-text-primary rounded-md",
+              "placeholder:text-text-secondary/40",
+              "border border-card-border resize-none",
+              "outline-none transition-all duration-200",
+              "focus:border-accent-primary focus:glow-purple",
             )}
-          >
-            {phase3.freeText.length} / {MAX_FREETEXT_LENGTH}
-          </span>
+          />
+          <div className="flex justify-end">
+            <span className={cn("text-xs", phase3.freeText.length >= MAX_FREETEXT_LENGTH ? "text-accent-pink" : "text-text-secondary")}>
+              {phase3.freeText.length} / {MAX_FREETEXT_LENGTH}
+            </span>
+          </div>
         </div>
-      </PixelCard>
+      </TerminalCard>
 
-      {/* Soul name input */}
-      <PixelCard className="flex flex-col gap-3 p-5">
-        <div className="flex flex-col gap-1">
-          <span className="font-pixel text-[9px] text-text-secondary uppercase tracking-wider">
-            {m.phase3.nameLabel}
-          </span>
-          <span className="font-pixel text-[7px] text-text-secondary">
-            {m.phase3.nameRequired}
-          </span>
+      <TerminalCard title="identity" className="!p-5">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-text-secondary tracking-wider">{m.phase3.nameLabel}</span>
+            <span className="text-xs text-text-secondary">{m.phase3.nameRequired}</span>
+          </div>
+          <TerminalInput
+            id="soul-name"
+            value={phase3.soulName}
+            onChange={handleNameChange}
+            placeholder={m.phase3.namePlaceholder}
+            maxLength={30}
+          />
         </div>
-        <PixelInput
-          id="soul-name"
-          value={phase3.soulName}
-          onChange={handleNameChange}
-          placeholder={m.phase3.namePlaceholder}
-          maxLength={30}
-        />
-      </PixelCard>
+      </TerminalCard>
 
-      {/* Generate button */}
       <div className="flex justify-end pt-2">
-        <PixelButton
-          size="lg"
-          variant="pink"
-          onClick={handleGenerate}
-          disabled={!isValid}
-          className="w-full sm:w-auto"
-        >
+        <TerminalButton size="lg" variant="primary" onClick={handleGenerate} disabled={!isValid} className="w-full sm:w-auto">
           {m.phase3.generateButton}
-        </PixelButton>
+        </TerminalButton>
       </div>
 
-      {/* Validation hint */}
       {!isValid && (
-        <p className="font-pixel text-[8px] text-accent-pink text-center">
-          {m.phase3.nameValidation}
-        </p>
+        <p className="text-xs text-accent-pink text-center">{m.phase3.nameValidation}</p>
       )}
     </div>
   );

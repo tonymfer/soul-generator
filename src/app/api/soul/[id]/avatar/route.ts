@@ -1,7 +1,7 @@
 // ============================================================
 // GET /api/soul/[id]/avatar
 // Generates and returns a deterministic avatar for a soul.
-// Supports ?format=svg (default) or ?format=png (501)
+// Supports ?format=html|ansi|text|json
 //
 // Public endpoint — no auth required (avatars are for OG images
 // and sharing), but only serves avatars for public souls
@@ -10,7 +10,7 @@
 
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { generateAvatarSvg } from "@/lib/avatar";
+import { generatePortrait, renderHtml, renderAnsi, renderPlain } from "@/lib/avatar";
 import type { TraitVector } from "@/lib/generators/types";
 
 type RouteParams = {
@@ -19,11 +19,6 @@ type RouteParams = {
 
 // ============================================================
 // Runtime validation for TraitVector
-// Ensures DB data is well-formed before passing to SVG generation.
-// This is the safety boundary — if validation passes, the SVG
-// generator only receives known-good enum values, so the
-// resulting SVG (used with dangerouslySetInnerHTML in components)
-// cannot contain injected content.
 // ============================================================
 
 function isValidTraitVector(data: unknown): data is TraitVector {
@@ -66,33 +61,26 @@ const FALLBACK_TRAIT_VECTOR: TraitVector = {
   response_structure: "mixed",
 };
 
+const VALID_FORMATS = ["html", "ansi", "text", "json"] as const;
+type AvatarFormat = (typeof VALID_FORMATS)[number];
+
 export async function GET(
   request: Request,
   { params }: RouteParams,
 ) {
   const { id } = await params;
   const { searchParams } = new URL(request.url);
-  const format = searchParams.get("format") ?? "svg";
+  const format = (searchParams.get("format") ?? "html") as AvatarFormat;
 
   // Validate format
-  if (format !== "svg" && format !== "png") {
+  if (!VALID_FORMATS.includes(format)) {
     return NextResponse.json(
-      { error: "Unsupported format. Use ?format=svg or ?format=png" },
+      { error: `Unsupported format. Use ?format=${VALID_FORMATS.join("|")}` },
       { status: 400 },
     );
   }
 
-  // PNG is not yet supported — return 501 instead of serving SVG
-  // with a misleading Content-Type
-  if (format === "png") {
-    return NextResponse.json(
-      { error: "PNG 형식은 아직 지원되지 않습니다. format=svg를 사용해주세요." },
-      { status: 501 },
-    );
-  }
-
   // Fetch public soul from Supabase
-  // Only serve avatars for public souls (is_public = true)
   const supabase = await createClient();
   const { data: soul, error } = await supabase
     .from("souls")
@@ -124,18 +112,51 @@ export async function GET(
     ? rawTraitVector
     : FALLBACK_TRAIT_VECTOR;
 
-  // Generate SVG
-  // Safety: traitVector is validated above, so generateAvatarSvg only
-  // receives known-good enum values. No user-supplied strings reach
-  // the SVG output, making dangerouslySetInnerHTML usage safe.
-  const svg = generateAvatarSvg(traitVector);
+  // Generate portrait
+  const portrait = generatePortrait(traitVector);
 
-  // Return SVG
-  return new NextResponse(svg, {
-    status: 200,
-    headers: {
-      "Content-Type": "image/svg+xml",
-      "Cache-Control": "public, max-age=31536000, immutable",
-    },
-  });
+  const cacheHeaders = {
+    "Cache-Control": "public, max-age=31536000, immutable",
+  };
+
+  switch (format) {
+    case "html":
+      return new NextResponse(renderHtml(portrait), {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+          ...cacheHeaders,
+        },
+      });
+    case "ansi":
+      return new NextResponse(renderAnsi(portrait), {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          ...cacheHeaders,
+        },
+      });
+    case "text":
+      return new NextResponse(renderPlain(portrait), {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          ...cacheHeaders,
+        },
+      });
+    case "json":
+      return NextResponse.json(
+        {
+          grid: portrait.grid,
+          colors: portrait.colors,
+          width: portrait.width,
+          height: portrait.height,
+          palette: portrait.palette,
+        },
+        {
+          status: 200,
+          headers: cacheHeaders,
+        },
+      );
+  }
 }

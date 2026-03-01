@@ -1,3 +1,20 @@
+// Terminal components (dark theme)
+export { TerminalButton } from "./terminal-button";
+export type { TerminalButtonProps, TerminalButtonVariant, TerminalButtonSize } from "./terminal-button";
+
+export { TerminalCard } from "./terminal-card";
+export type { TerminalCardProps } from "./terminal-card";
+
+export { TerminalInput } from "./terminal-input";
+export type { TerminalInputProps } from "./terminal-input";
+
+export { TerminalBadge } from "./terminal-badge";
+export type { TerminalBadgeProps, TerminalBadgeVariant } from "./terminal-badge";
+
+export { TerminalSpinner } from "./terminal-spinner";
+export type { TerminalSpinnerProps } from "./terminal-spinner";
+
+// Legacy pixel components (kept during migration, removed in Phase 2d)
 export { PixelButton } from "./pixel-button";
 export type { PixelButtonProps, PixelButtonVariant, PixelButtonSize } from "./pixel-button";
 

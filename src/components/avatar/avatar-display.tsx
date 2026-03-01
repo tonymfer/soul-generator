@@ -17,7 +17,7 @@ export interface AvatarDisplayProps {
 /**
  * Versatile avatar component with fallback chain:
  * 1. If avatarUrl exists -> render <img>
- * 2. If traitVector exists -> render AvatarPreview (inline SVG)
+ * 2. If traitVector exists -> render AvatarPreview (ASCII portrait)
  * 3. Fallback -> emoji placeholder
  */
 export function AvatarDisplay({
@@ -35,11 +35,7 @@ export function AvatarDisplay({
         alt="Soul avatar"
         width={size}
         height={size}
-        className={cn(
-          "pixel-border",
-          className,
-        )}
-        style={{ imageRendering: "pixelated" }}
+        className={cn("rounded", className)}
       />
     );
   }
@@ -59,7 +55,7 @@ export function AvatarDisplay({
   return (
     <div
       className={cn(
-        "flex items-center justify-center pixel-border bg-accent-primary/10",
+        "flex items-center justify-center rounded bg-[#12121e] border border-[#1a1a2e]",
         className,
       )}
       style={{ width: size, height: size }}

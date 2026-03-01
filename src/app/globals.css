@@ -1,37 +1,29 @@
 @import "tailwindcss";
 
 /* ============================================
-   ABTI - Kawaii Pixel Theme
+   ABTI - Dark Terminal Theme
    Agent Behavior Type Indicator
    ============================================ */
 
 :root {
-  /* --- Core palette --- */
-  --bg-primary: #faf5ff;
-  --bg-secondary: #f0fdf4;
-  --accent-primary: #a78bfa;
-  --accent-secondary: #34d399;
+  /* --- Core palette (dark terminal) --- */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121e;
+  --accent-primary: #7c6ef6;
+  --accent-secondary: #c084fc;
   --accent-pink: #f472b6;
   --accent-yellow: #fbbf24;
-  --text-primary: #1e1b4b;
-  --text-secondary: #6b7280;
-  --card-bg: #ffffff;
-  --card-border: #e5e7eb;
+  --accent-green: #4ade80;
+  --accent-red: #f87171;
+  --text-primary: #e0e0e0;
+  --text-secondary: #8888a0;
+  --card-bg: #12121e;
+  --card-border: #1a1a2e;
 
-  /* --- Pixel border shadow (3D pixel look) --- */
-  --pixel-border: 0 0 0 2px var(--text-primary),
-    0 4px 0 0 var(--text-primary);
-  --pixel-border-sm: 0 0 0 1.5px var(--text-primary),
-    0 2px 0 0 var(--text-primary);
-  --pixel-border-accent: 0 0 0 2px var(--accent-primary),
-    0 4px 0 0 var(--accent-primary);
-  --pixel-border-pink: 0 0 0 2px var(--accent-pink),
-    0 4px 0 0 var(--accent-pink);
-
-  /* --- Glow effects --- */
-  --glow-purple: 0 0 20px rgba(167, 139, 250, 0.4);
-  --glow-pink: 0 0 20px rgba(244, 114, 182, 0.4);
-  --glow-mint: 0 0 20px rgba(52, 211, 153, 0.4);
+  /* --- Terminal glow effects --- */
+  --glow-purple: 0 0 20px rgba(124, 110, 246, 0.3);
+  --glow-pink: 0 0 20px rgba(244, 114, 182, 0.3);
+  --glow-green: 0 0 20px rgba(74, 222, 128, 0.3);
 }
 
 /* ============================================
@@ -44,81 +36,46 @@
   --color-accent-secondary: var(--accent-secondary);
   --color-accent-pink: var(--accent-pink);
   --color-accent-yellow: var(--accent-yellow);
+  --color-accent-green: var(--accent-green);
+  --color-accent-red: var(--accent-red);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
 
-  --font-pixel: var(--font-press-start);
-  --font-pixel-accent: var(--font-silkscreen);
+  --font-brand: var(--font-press-start);
+  --font-mono: var(--font-jetbrains);
 
-  --animate-bounce-pixel: bounce-pixel 0.5s ease infinite alternate;
-  --animate-sparkle: sparkle 1.5s ease-in-out infinite;
-  --animate-shimmer: shimmer 2s linear infinite;
-  --animate-float: float 3s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-blink: blink 1s step-end infinite;
 }
 
 /* ============================================
    Keyframes
    ============================================ */
-@keyframes bounce-pixel {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes sparkle {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0) rotate(0deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1) rotate(180deg);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
 @keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 @keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 8px rgba(167, 139, 250, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 24px rgba(167, 139, 250, 0.6);
-  }
+  0%, 100% { box-shadow: 0 0 8px rgba(124, 110, 246, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(124, 110, 246, 0.5); }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
 /* ============================================
@@ -127,43 +84,46 @@
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-pixel), monospace;
-  image-rendering: pixelated;
+  font-family: var(--font-mono), ui-monospace, monospace;
 }
 
-/* Selection color */
 ::selection {
   background: var(--accent-primary);
   color: white;
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
 /* ============================================
-   Pixel border utilities (via @utility)
+   Terminal border utilities
    ============================================ */
-@utility pixel-border {
-  box-shadow: var(--pixel-border);
+@utility terminal-border {
+  border: 1px solid var(--card-border);
 }
 
-@utility pixel-border-sm {
-  box-shadow: var(--pixel-border-sm);
-}
-
-@utility pixel-border-accent {
-  box-shadow: var(--pixel-border-accent);
-}
-
-@utility pixel-border-pink {
-  box-shadow: var(--pixel-border-pink);
-}
-
-/* Pressed state: remove the bottom shadow offset */
-@utility pixel-border-pressed {
-  box-shadow: 0 0 0 2px var(--text-primary);
-  transform: translateY(2px);
+@utility terminal-border-accent {
+  border: 1px solid var(--accent-primary);
 }
 
 /* ============================================
-   Glow utilities
+   Glow utilities (dark theme)
    ============================================ */
 @utility glow-purple {
   box-shadow: var(--glow-purple);
@@ -173,8 +133,8 @@ body {
   box-shadow: var(--glow-pink);
 }
 
-@utility glow-mint {
-  box-shadow: var(--glow-mint);
+@utility glow-green {
+  box-shadow: var(--glow-green);
 }
 
 /* ============================================
@@ -193,54 +153,26 @@ body {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.03) 2px,
-    rgba(0, 0, 0, 0.03) 4px
+    rgba(124, 110, 246, 0.02) 2px,
+    rgba(124, 110, 246, 0.02) 4px
   );
   pointer-events: none;
 }
 
 /* ============================================
-   Shimmer loading background
+   Fade-in animation
    ============================================ */
-@utility shimmer-bg {
-  background: linear-gradient(
-    90deg,
-    var(--bg-primary) 25%,
-    var(--accent-primary) 50%,
-    var(--bg-primary) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s linear infinite;
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
 }
 
 /* ============================================
-   Pastel gradient backgrounds
+   Custom Trait Slider (dark terminal style)
    ============================================ */
-@utility gradient-pastel {
-  background: linear-gradient(
-    135deg,
-    var(--bg-primary),
-    var(--bg-secondary)
-  );
-}
-
-@utility gradient-candy {
-  background: linear-gradient(
-    135deg,
-    rgba(167, 139, 250, 0.15),
-    rgba(244, 114, 182, 0.15),
-    rgba(251, 191, 36, 0.1)
-  );
-}
-
-/* ============================================
-   Custom Trait Slider (pixel-styled range input)
-   ============================================ */
-
 .trait-slider {
   -webkit-appearance: none;
   appearance: none;
-  height: 12px;
+  height: 8px;
   background: transparent;
   cursor: pointer;
   position: relative;
@@ -248,26 +180,28 @@ body {
 
 /* Track */
 .trait-slider::-webkit-slider-runnable-track {
-  height: 12px;
+  height: 8px;
+  border-radius: 4px;
   background: linear-gradient(
     to right,
     var(--accent-primary) 0%,
     var(--accent-primary) var(--slider-fill, 50%),
-    var(--card-bg) var(--slider-fill, 50%),
-    var(--card-bg) 100%
+    var(--bg-secondary) var(--slider-fill, 50%),
+    var(--bg-secondary) 100%
   );
-  box-shadow: 0 0 0 1.5px var(--text-primary), 0 2px 0 0 var(--text-primary);
-  image-rendering: pixelated;
+  border: 1px solid var(--card-border);
 }
 
 .trait-slider::-moz-range-track {
-  height: 12px;
-  background: var(--card-bg);
-  box-shadow: 0 0 0 1.5px var(--text-primary), 0 2px 0 0 var(--text-primary);
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
 }
 
 .trait-slider::-moz-range-progress {
-  height: 12px;
+  height: 8px;
+  border-radius: 4px;
   background: var(--accent-primary);
 }
 
@@ -275,55 +209,35 @@ body {
 .trait-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--accent-pink);
-  box-shadow: 0 0 0 2px var(--text-primary), 0 3px 0 0 var(--text-primary);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 2px solid var(--text-primary);
   cursor: grab;
-  margin-top: -4px;
-  transition: transform 0.1s ease;
-  image-rendering: pixelated;
+  margin-top: -5px;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
 }
 
 .trait-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: none;
-  background: var(--accent-pink);
-  box-shadow: 0 0 0 2px var(--text-primary), 0 3px 0 0 var(--text-primary);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--text-primary);
+  background: var(--accent-primary);
   cursor: grab;
 }
 
 .trait-slider::-webkit-slider-thumb:active {
   cursor: grabbing;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .trait-slider::-moz-range-thumb:active {
   cursor: grabbing;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .trait-slider:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 2px var(--accent-primary), 0 3px 0 0 var(--accent-primary),
-    0 0 12px rgba(167, 139, 250, 0.5);
-}
-
-/* ============================================
-   Fade-in animation for quiz transitions
-   ============================================ */
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@utility animate-fade-in-up {
-  animation: fade-in-up 0.4s ease-out;
+  box-shadow: 0 0 0 2px var(--accent-primary), 0 0 12px rgba(124, 110, 246, 0.5);
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Press_Start_2P, Silkscreen } from "next/font/google";
+import { Press_Start_2P, JetBrains_Mono } from "next/font/google";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { LocaleProvider } from "@/lib/i18n/locale-provider";
 import { messages } from "@/lib/i18n/messages";
@@ -12,10 +12,9 @@ const pressStart2P = Press_Start_2P({
   display: "swap",
 });
 
-const silkscreen = Silkscreen({
-  weight: ["400", "700"],
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-silkscreen",
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -35,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
       "personality",
       "agent",
       "MBTI",
-      "pixel",
       "soul",
+      "terminal",
     ],
     openGraph: {
       type: "website",
@@ -63,7 +62,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${pressStart2P.variable} ${silkscreen.variable} min-h-screen bg-bg-primary text-text-primary font-pixel antialiased`}
+        className={`${pressStart2P.variable} ${jetbrainsMono.variable} min-h-screen bg-bg-primary text-text-primary font-mono antialiased`}
       >
         <LocaleProvider locale={locale}>{children}</LocaleProvider>
       </body>

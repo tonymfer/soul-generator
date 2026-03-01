@@ -3,7 +3,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { QuizProgress } from "@/components/quiz/quiz-progress";
 import { cn } from "@/lib/utils/cn";
-import { Sparkle } from "@/components/ui";
 
 function getPhaseFromPath(pathname: string): 1 | 2 | 3 {
   if (pathname.includes("phase-3")) return 3;
@@ -41,38 +40,33 @@ export default function CreateLayout({
   };
 
   return (
-    <div className="min-h-screen flex flex-col gradient-pastel">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="relative flex items-center justify-center px-4 py-4 sm:py-5">
-        {/* Back button */}
+      <header className="relative flex items-center justify-center px-4 py-4 sm:py-5 border-b border-card-border">
         {showBack && (
           <button
             type="button"
             onClick={handleBack}
             className={cn(
               "absolute left-4 top-1/2 -translate-y-1/2",
-              "font-pixel text-[10px] text-text-secondary",
+              "text-xs text-text-secondary",
               "hover:text-accent-primary transition-colors duration-200",
               "cursor-pointer",
             )}
-            aria-label="이전 단계로"
+            aria-label="Go back"
           >
-            {"< 뒤로"}
+            &lt; back
           </button>
         )}
 
-        {/* Branding */}
-        <div className="relative">
-          <h1 className="font-pixel-accent font-bold text-lg sm:text-xl text-accent-primary">
-            ABTI
-          </h1>
-          <Sparkle count={3} color="var(--accent-yellow)" />
-        </div>
+        <h1 className="font-brand text-lg sm:text-xl text-accent-primary">
+          ABTI
+        </h1>
       </header>
 
       {/* Progress bar */}
       {showProgress && (
-        <div className="px-4 sm:px-8 pb-4 max-w-2xl mx-auto w-full">
+        <div className="px-4 sm:px-8 pb-4 pt-4 max-w-2xl mx-auto w-full">
           <QuizProgress currentPhase={currentPhase} />
         </div>
       )}

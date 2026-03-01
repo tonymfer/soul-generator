@@ -1,32 +1,21 @@
 // ============================================================
 // Avatar System — Barrel Export
-// Deterministic pixel-art avatar generation from TraitVector
+// Deterministic ASCII portrait generation from TraitVector
 // ============================================================
 
 // Palette
-export { getPalette } from "./palette";
-export type { AvatarPalette } from "./palette";
+export { getPalette, getMbtiColor } from "./palette";
+export type { AsciiPalette, AvatarPalette } from "./palette";
 
-// Parts catalog
-export {
-  getBodyShape,
-  getEyeStyle,
-  getMouthStyle,
-  getTopAccessory,
-  getBgPattern,
-} from "./parts-catalog";
-export type {
-  BodyType,
-  EyeStyle,
-  MouthStyle,
-  TopAccessory,
-  BgPattern,
-} from "./parts-catalog";
+// Parts catalog types
+export type { BodyType, EyeStyle, MouthStyle, TopAccessory, Grid, ColorGrid } from "./parts-catalog";
+export { GRID_WIDTH, GRID_HEIGHT } from "./parts-catalog";
 
 // Composer
-export {
-  traitToAvatarConfig,
-  composeSvg,
-  generateAvatarSvg,
-} from "./composer";
-export type { AvatarConfig } from "./composer";
+export { traitToAvatarConfig, composePortrait, generatePortrait } from "./composer";
+export type { AvatarConfig, AsciiPortrait } from "./composer";
+
+// Renderers
+export { renderHtml } from "./render-html";
+export { renderAnsi } from "./render-ansi";
+export { renderPlain } from "./render-plain";
