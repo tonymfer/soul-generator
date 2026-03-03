@@ -5,9 +5,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { checkUserLike } from "@/actions/like";
 import { getMBTIType } from "@/lib/constants/mbti";
-import { PixelBadge } from "@/components/ui/pixel-badge";
+import { TerminalBadge } from "@/components/ui/terminal-badge";
 import { MBTI_ICONS } from "@/lib/constants/mbti-icons";
-import { Sparkle } from "@/components/ui/sparkle";
 import {
   TraitDisplay,
   SoulMdViewer,
@@ -122,7 +121,7 @@ export default async function SoulDetailPage({
   const mbtiInfo = traitVector ? getMBTIType(traitVector.mbti) : undefined;
 
   return (
-    <div className="min-h-screen gradient-pastel">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-bg-primary/80 backdrop-blur-sm border-b-2 border-card-border">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -147,7 +146,6 @@ export default async function SoulDetailPage({
               traitVector={traitVector}
               size={96}
             />
-            <Sparkle count={4} color="var(--accent-yellow)" />
           </div>
 
           <h1 className="font-pixel text-lg sm:text-xl text-text-primary leading-relaxed text-balance">
@@ -163,7 +161,7 @@ export default async function SoulDetailPage({
           {soul.tags && soul.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 justify-center">
               {mbtiInfo && (
-                <PixelBadge variant="purple">
+                <TerminalBadge variant="purple">
                   {MBTI_ICONS[mbtiInfo.code] ? (
                     <svg viewBox="0 0 16 16" width={14} height={14} className="inline-block mr-1" aria-hidden="true">
                       {MBTI_ICONS[mbtiInfo.code]}
@@ -172,12 +170,12 @@ export default async function SoulDetailPage({
                     <span className="mr-1">{mbtiInfo.emoji}</span>
                   )}
                   {mbtiInfo.code}
-                </PixelBadge>
+                </TerminalBadge>
               )}
               {soul.tags.map((tag) => (
-                <PixelBadge key={tag} variant="pink">
+                <TerminalBadge key={tag} variant="pink">
                   {tag}
-                </PixelBadge>
+                </TerminalBadge>
               ))}
             </div>
           )}

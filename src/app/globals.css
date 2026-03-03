@@ -49,6 +49,10 @@
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
   --animate-float: float 3s ease-in-out infinite;
   --animate-blink: blink 1s step-end infinite;
+  --animate-glow-drift: glow-drift 8s ease-in-out infinite;
+  --animate-reveal-up: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-text-shimmer: text-shimmer 3s ease-in-out infinite;
+  --animate-grid-pulse: grid-pulse 4s ease-in-out infinite;
 }
 
 /* ============================================
@@ -81,6 +85,62 @@
 @keyframes trait-fill {
   from { width: 0; }
   to { width: var(--trait-width); }
+}
+
+@keyframes glow-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translate(30px, -20px) scale(1.1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-10px, 15px) scale(0.95);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translate(-25px, -10px) scale(1.05);
+    opacity: 0.55;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes text-shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.07; }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-radius, 60px)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-radius, 60px)) rotate(-360deg); }
 }
 
 /* ============================================
@@ -127,6 +187,11 @@ body {
   border: 1px solid var(--accent-primary);
 }
 
+@utility terminal-border-sm {
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+}
+
 /* ============================================
    Glow utilities (dark theme)
    ============================================ */
@@ -169,6 +234,159 @@ body {
    ============================================ */
 @utility animate-fade-in-up {
   animation: fade-in-up 0.4s ease-out;
+}
+
+/* ============================================
+   Staggered reveal animation system
+   ============================================ */
+@utility animate-reveal-up {
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ============================================
+   Grid pattern background overlay
+   ============================================ */
+@utility grid-bg {
+  position: relative;
+}
+
+.grid-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 110, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 110, 246, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+/* ============================================
+   Ambient noise/grain overlay
+   ============================================ */
+@utility grain-overlay {
+  position: relative;
+}
+
+.grain-overlay::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ============================================
+   Text shimmer gradient effect
+   ============================================ */
+@utility text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary) 0%,
+    var(--accent-pink) 25%,
+    var(--accent-primary) 50%,
+    var(--accent-secondary) 75%,
+    var(--accent-primary) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s ease-in-out infinite;
+}
+
+/* ============================================
+   Hero ambient glow orbs
+   ============================================ */
+.hero-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: glow-drift 8s ease-in-out infinite;
+}
+
+/* ============================================
+   Terminal typing cursor
+   ============================================ */
+.typing-cursor::after {
+  content: "█";
+  display: inline;
+  animation: cursor-blink 1s step-end infinite;
+  color: var(--accent-primary);
+  font-size: 0.8em;
+  margin-left: 2px;
+}
+
+/* ============================================
+   Section divider with glow
+   ============================================ */
+.section-glow-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 110, 246, 0.3) 20%,
+    rgba(244, 114, 182, 0.3) 50%,
+    rgba(124, 110, 246, 0.3) 80%,
+    transparent 100%
+  );
+  border: none;
+}
+
+/* ============================================
+   Step connector line (between How It Works)
+   ============================================ */
+.step-connector {
+  position: relative;
+}
+
+.step-connector::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  opacity: 0.3;
+}
+
+.step-connector:last-child::after {
+  display: none;
+}
+
+/* ============================================
+   Floating pixel particles
+   ============================================ */
+.pixel-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  pointer-events: none;
+  animation: float var(--particle-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--particle-delay, 0s);
+  opacity: var(--particle-opacity, 0.4);
+}
+
+/* ============================================
+   Feature card enhanced hover
+   ============================================ */
+.feature-card-enhanced {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card-enhanced:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 30px rgba(124, 110, 246, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================

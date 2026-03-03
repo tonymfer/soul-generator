@@ -109,10 +109,10 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
         type="button"
         onClick={() => setOpen(!open)}
         className={[
-          "inline-flex items-center justify-center gap-1.5 font-pixel",
+          "inline-flex items-center justify-center gap-1.5 font-mono",
           "px-3 py-1.5 text-[10px]",
-          "bg-accent-secondary text-white pixel-border",
-          "hover:brightness-110 active:pixel-border-pressed",
+          "bg-accent-secondary text-white terminal-border rounded-md",
+          "hover:brightness-110 active:translate-y-0.5",
           "transition-all duration-150 ease-out cursor-pointer select-none",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2",
         ].join(" ")}
@@ -133,7 +133,7 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
             "absolute top-full right-0 mt-2 z-50",
             "min-w-[220px]",
             "bg-card-bg border-2 border-text-primary",
-            "pixel-border-sm",
+            "terminal-border-sm",
             "py-1",
             "animate-fade-in-up",
           ].join(" ")}
@@ -166,7 +166,7 @@ export function ExportMenu({ soulId, title }: ExportMenuProps) {
                 <Icon
                   size={14}
                   className={`mt-0.5 text-accent-primary shrink-0 ${
-                    isDownloading ? "animate-bounce-pixel" : ""
+                    isDownloading ? "" : ""
                   }`}
                 />
                 <div className="flex flex-col gap-0.5">

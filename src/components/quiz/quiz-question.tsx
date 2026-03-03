@@ -52,13 +52,13 @@ function QuizQuestion({
               onClick={() => onSelect(option.id)}
               className={cn(
                 "w-full p-4 text-left min-h-[44px]",
-                "bg-card-bg pixel-border-sm cursor-pointer",
+                "bg-card-bg terminal-border-sm cursor-pointer",
                 "transition-all duration-200 ease-out",
                 "hover:scale-[1.01] hover:brightness-105",
                 "active:scale-[0.99]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                 isSelected && [
-                  "pixel-border-accent",
+                  "terminal-border-accent",
                   "bg-accent-primary/10",
                   "scale-[1.02]",
                   "ring-2 ring-accent-primary/50",

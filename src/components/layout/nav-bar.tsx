@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { AuthButton } from "./auth-button";
 import { LocaleToggle } from "./locale-toggle";
 import { getLocale } from "@/lib/i18n/get-locale";
@@ -51,9 +51,9 @@ export async function NavBar({
         <div className="flex items-center gap-3">
           <LocaleToggle />
           <Link href="/gallery" className="hidden sm:inline-flex">
-            <PixelButton variant="ghost" size="sm">
+            <TerminalButton variant="ghost" size="sm">
               {m.common.gallery}
-            </PixelButton>
+            </TerminalButton>
           </Link>
           <AuthButton />
         </div>

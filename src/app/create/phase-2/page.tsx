@@ -80,7 +80,7 @@ export default function Phase2Page() {
           <div
             key={q.id}
             className={cn(
-              "w-3 h-3 transition-all duration-300 pixel-border-sm",
+              "w-3 h-3 transition-all duration-300 terminal-border-sm",
               i < currentIndex && "bg-accent-primary",
               i === currentIndex && "bg-accent-pink scale-125",
               i > currentIndex && "bg-card-bg",

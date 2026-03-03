@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { messages } from "@/lib/i18n/messages";
 
@@ -13,8 +13,8 @@ export default async function NotFound() {
   const m = messages[locale];
 
   return (
-    <div className="min-h-screen gradient-pastel flex items-center justify-center px-4">
-      <PixelCard className="max-w-md w-full text-center py-12 space-y-6">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <TerminalCard className="max-w-md w-full text-center py-12 space-y-6">
         <p className="font-pixel text-4xl sm:text-5xl text-accent-primary">
           404
         </p>
@@ -32,11 +32,11 @@ export default async function NotFound() {
         </p>
 
         <Link href="/">
-          <PixelButton variant="primary" size="md">
+          <TerminalButton variant="primary" size="md">
             {m.notFound.homeButton}
-          </PixelButton>
+          </TerminalButton>
         </Link>
-      </PixelCard>
+      </TerminalCard>
     </div>
   );
 }

@@ -7,7 +7,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { PixelButton } from "@/components/ui";
+import { TerminalButton } from "@/components/ui";
 import { LogIn, LogOut } from "lucide-react";
 
 interface AuthButtonClientProps {
@@ -38,10 +38,10 @@ export function AuthButtonClient({ user, profile }: AuthButtonClientProps) {
 
   if (!user) {
     return (
-      <PixelButton variant="primary" size="sm" onClick={handleLogin}>
+      <TerminalButton variant="primary" size="sm" onClick={handleLogin}>
         <LogIn className="w-3 h-3 mr-1.5" />
         Login
-      </PixelButton>
+      </TerminalButton>
     );
   }
 
@@ -53,11 +53,11 @@ export function AuthButtonClient({ user, profile }: AuthButtonClientProps) {
           <img
             src={profile.avatar_url}
             alt={profile.display_name ?? profile.username}
-            className="w-7 h-7 pixel-border-sm hover:brightness-110 transition-all"
+            className="w-7 h-7 terminal-border-sm rounded-full hover:brightness-110 transition-all"
             style={{ imageRendering: "pixelated" }}
           />
         ) : (
-          <div className="w-7 h-7 bg-accent-primary pixel-border-sm flex items-center justify-center text-[8px] text-white font-pixel hover:brightness-110 transition-all">
+          <div className="w-7 h-7 bg-accent-primary terminal-border-sm rounded-full flex items-center justify-center text-[8px] text-white font-pixel hover:brightness-110 transition-all">
             {(profile?.display_name ?? profile?.username ?? user.email)?.[0]?.toUpperCase() ?? "?"}
           </div>
         )}
@@ -72,10 +72,10 @@ export function AuthButtonClient({ user, profile }: AuthButtonClientProps) {
       </Link>
 
       {/* Logout button */}
-      <PixelButton variant="ghost" size="sm" onClick={handleLogout}>
+      <TerminalButton variant="ghost" size="sm" onClick={handleLogout}>
         <LogOut className="w-3 h-3 mr-1" />
         <span className="hidden sm:inline">Logout</span>
-      </PixelButton>
+      </TerminalButton>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Heart } from "lucide-react";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { toggleLike } from "@/actions/like";
 import { useMessages } from "@/lib/i18n";
 
@@ -51,8 +51,8 @@ export function LikeButton({
   };
 
   return (
-    <PixelButton
-      variant={liked ? "pink" : "ghost"}
+    <TerminalButton
+      variant={liked ? "primary" : "ghost"}
       size="sm"
       onClick={handleClick}
       disabled={isPending}
@@ -61,9 +61,9 @@ export function LikeButton({
       <Heart
         size={12}
         fill={liked ? "currentColor" : "none"}
-        className={liked ? "animate-bounce-pixel" : ""}
+        className={liked ? "" : ""}
       />
       <span>{m.common.like} {count}</span>
-    </PixelButton>
+    </TerminalButton>
   );
 }

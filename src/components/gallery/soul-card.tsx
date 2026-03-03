@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Heart, GitFork } from "lucide-react";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelBadge } from "@/components/ui/pixel-badge";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalBadge } from "@/components/ui/terminal-badge";
 import { AvatarDisplay } from "@/components/avatar";
 import { messages } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/get-locale";
@@ -60,8 +60,8 @@ export function SoulCard({ soul, locale = "en" }: SoulCardProps) {
 
   return (
     <Link href={`/soul/${soul.slug}`} className="block group">
-      <PixelCard
-        className="h-full p-4 transition-all duration-200 group-hover:glow-purple group-hover:-translate-y-1"
+      <TerminalCard glow
+        className="h-full p-4 transition-all duration-200 group-hover:-translate-y-1"
       >
         <div className="flex flex-col items-center text-center gap-3">
           {/* Avatar */}
@@ -87,9 +87,9 @@ export function SoulCard({ soul, locale = "en" }: SoulCardProps) {
           {displayTags.length > 0 && (
             <div className="flex flex-wrap gap-1 justify-center">
               {displayTags.map((tag) => (
-                <PixelBadge key={tag} variant="pink">
+                <TerminalBadge key={tag} variant="pink">
                   {tag}
-                </PixelBadge>
+                </TerminalBadge>
               ))}
             </div>
           )}
@@ -107,7 +107,7 @@ export function SoulCard({ soul, locale = "en" }: SoulCardProps) {
             <span>{relativeTime(soul.created_at, locale)}</span>
           </div>
         </div>
-      </PixelCard>
+      </TerminalCard>
     </Link>
   );
 }

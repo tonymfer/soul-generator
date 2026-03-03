@@ -4,7 +4,7 @@
 
 function SkeletonCard() {
   return (
-    <div className="p-4 bg-card-bg pixel-border">
+    <div className="p-4 bg-card-bg terminal-border rounded-md">
       <div className="flex flex-col items-center gap-3">
         {/* Avatar skeleton */}
         <div className="w-16 h-16 shimmer-bg opacity-20 rounded" />
@@ -26,7 +26,7 @@ function SkeletonCard() {
 
 export default function GalleryLoading() {
   return (
-    <div className="min-h-screen gradient-pastel">
+    <div className="min-h-screen">
       {/* Header skeleton */}
       <header className="sticky top-0 z-10 bg-bg-primary/80 backdrop-blur-sm border-b-2 border-card-border">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

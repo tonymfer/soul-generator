@@ -1,7 +1,7 @@
 "use client";
 
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelBadge } from "@/components/ui/pixel-badge";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalBadge } from "@/components/ui/terminal-badge";
 import { PixelIcon } from "@/components/ui/pixel-icon";
 import { getMBTIType } from "@/lib/constants/mbti";
 import { MBTI_ICONS } from "@/lib/constants/mbti-icons";
@@ -20,7 +20,7 @@ function TraitBar({ label, value }: { label: string; value: number }) {
         <span className="font-pixel-accent text-[11px] text-text-primary">{label}</span>
         <span className="font-pixel text-[10px] text-text-secondary">{percentage}%</span>
       </div>
-      <div className="h-3 w-full bg-card-border pixel-border-sm relative overflow-hidden">
+      <div className="h-3 w-full bg-card-border terminal-border-sm relative overflow-hidden">
         <div
           className="h-full bg-accent-primary animate-[trait-fill_0.8s_ease-out_forwards]"
           style={{ "--trait-width": `${percentage}%` } as React.CSSProperties}
@@ -60,14 +60,14 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
   ];
 
   return (
-    <PixelCard className="space-y-5">
+    <TerminalCard className="space-y-5">
       <h2 className="font-pixel text-sm text-accent-primary">
         {m.traits.sectionTitle}
       </h2>
 
       {mbtiInfo && (
         <div className="flex items-center gap-3">
-          <PixelBadge variant="purple" className="text-[10px]">
+          <TerminalBadge variant="purple" className="text-[10px]">
             {MBTI_ICONS[mbtiInfo.code] ? (
               <svg viewBox="0 0 16 16" width={14} height={14} className="inline-block mr-1" aria-hidden="true">
                 {MBTI_ICONS[mbtiInfo.code]}
@@ -76,7 +76,7 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
               <span className="mr-1">{mbtiInfo.emoji}</span>
             )}
             {mbtiInfo.code}
-          </PixelBadge>
+          </TerminalBadge>
           <span className="font-pixel-accent text-xs text-text-secondary">
             {locale === "ko" ? mbtiInfo.nameKo : mbtiInfo.nameEn}
           </span>
@@ -84,41 +84,41 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
       )}
 
       {traitVector.adhd !== "none" && (
-        <PixelBadge variant="yellow" className="text-[9px]">
+        <TerminalBadge variant="yellow" className="text-[9px]">
           ADHD: {traitVector.adhd.charAt(0).toUpperCase() + traitVector.adhd.slice(1)}
-        </PixelBadge>
+        </TerminalBadge>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
           <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.communicationStyle}</span>
-          <PixelBadge variant="mint">
+          <TerminalBadge variant="green">
             {commLabels[traitVector.communication_style] ?? traitVector.communication_style}
-          </PixelBadge>
+          </TerminalBadge>
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.energyPattern}</span>
-          <PixelBadge variant="pink">
+          <TerminalBadge variant="pink">
             {energyLabels[traitVector.energy_pattern] ?? traitVector.energy_pattern}
-          </PixelBadge>
+          </TerminalBadge>
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.decisionMode}</span>
-          <PixelBadge variant="purple">
+          <TerminalBadge variant="purple">
             {decisionLabels[traitVector.decision_mode] ?? traitVector.decision_mode}
-          </PixelBadge>
+          </TerminalBadge>
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.humorType}</span>
-          <PixelBadge variant="yellow">
+          <TerminalBadge variant="yellow">
             {humorLabels[traitVector.humor_type] ?? traitVector.humor_type}
-          </PixelBadge>
+          </TerminalBadge>
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-pixel text-[9px] text-text-secondary uppercase">{m.traits.responseStructure}</span>
-          <PixelBadge variant="default">
+          <TerminalBadge variant="default">
             {structureLabels[traitVector.response_structure] ?? traitVector.response_structure}
-          </PixelBadge>
+          </TerminalBadge>
         </div>
       </div>
 
@@ -143,9 +143,9 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {aiEnhancement.speaking_quirks.map((quirk, i) => (
-                  <PixelBadge key={i} variant="pink" className="text-[8px]">
+                  <TerminalBadge key={i} variant="pink" className="text-[8px]">
                     {quirk}
-                  </PixelBadge>
+                  </TerminalBadge>
                 ))}
               </div>
             </div>
@@ -158,9 +158,9 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {aiEnhancement.catchphrases.map((phrase, i) => (
-                  <PixelBadge key={i} variant="purple" className="text-[8px]">
+                  <TerminalBadge key={i} variant="purple" className="text-[8px]">
                     &ldquo;{phrase}&rdquo;
-                  </PixelBadge>
+                  </TerminalBadge>
                 ))}
               </div>
             </div>
@@ -173,9 +173,9 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {aiEnhancement.interests.map((interest, i) => (
-                  <PixelBadge key={i} variant="mint" className="text-[8px]">
+                  <TerminalBadge key={i} variant="green" className="text-[8px]">
                     {interest}
-                  </PixelBadge>
+                  </TerminalBadge>
                 ))}
               </div>
             </div>
@@ -188,9 +188,9 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {aiEnhancement.pet_peeves.map((peeve, i) => (
-                  <PixelBadge key={i} variant="yellow" className="text-[8px]">
+                  <TerminalBadge key={i} variant="yellow" className="text-[8px]">
                     {peeve}
-                  </PixelBadge>
+                  </TerminalBadge>
                 ))}
               </div>
             </div>
@@ -208,6 +208,6 @@ export function TraitDisplay({ traitVector, aiEnhancement }: TraitDisplayProps) 
           )}
         </div>
       )}
-    </PixelCard>
+    </TerminalCard>
   );
 }

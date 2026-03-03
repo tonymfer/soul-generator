@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { useMessages } from "@/lib/i18n";
 
 // ============================================================
@@ -19,8 +19,8 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
   const m = useMessages();
 
   return (
-    <div className="min-h-screen gradient-pastel flex items-center justify-center px-4">
-      <PixelCard className="max-w-md w-full text-center py-12 space-y-6">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <TerminalCard className="max-w-md w-full text-center py-12 space-y-6">
         <p className="text-4xl" role="img" aria-label="error">
           &#x26A0;&#xFE0F;
         </p>
@@ -34,16 +34,16 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <PixelButton variant="primary" size="md" onClick={reset}>
+          <TerminalButton variant="primary" size="md" onClick={reset}>
             {m.error.retryButton}
-          </PixelButton>
+          </TerminalButton>
           <Link href="/">
-            <PixelButton variant="ghost" size="md">
+            <TerminalButton variant="ghost" size="md">
               {m.error.homeButton}
-            </PixelButton>
+            </TerminalButton>
           </Link>
         </div>
-      </PixelCard>
+      </TerminalCard>
     </div>
   );
 }

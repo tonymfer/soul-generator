@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, type ReactNode } from "react";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 import { useMessages } from "@/lib/i18n";
 
@@ -32,7 +32,7 @@ function parseMarkdown(md: string): ReactNode[] {
       elements.push(
         <pre
           key={key++}
-          className="bg-text-primary/5 p-3 pixel-border-sm overflow-x-auto text-[10px] font-mono leading-relaxed text-text-primary"
+          className="bg-text-primary/5 p-3 terminal-border-sm overflow-x-auto text-[10px] font-mono leading-relaxed text-text-primary"
         >
           <code>{codeLines.join("\n")}</code>
         </pre>
@@ -204,10 +204,10 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
   }, [soulMd]);
 
   return (
-    <PixelCard className="space-y-3">
+    <TerminalCard className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="font-pixel text-sm text-accent-primary">SOUL.md</h2>
-        <PixelButton
+        <TerminalButton
           variant="ghost"
           size="sm"
           onClick={handleCopy}
@@ -224,7 +224,7 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
               <span>{m.viewer.copy}</span>
             </>
           )}
-        </PixelButton>
+        </TerminalButton>
       </div>
 
       <div className="space-y-2 relative">
@@ -235,7 +235,7 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
       </div>
 
       {needsCollapse && (
-        <PixelButton
+        <TerminalButton
           variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -253,8 +253,8 @@ export function SoulMdViewer({ soulMd }: SoulMdViewerProps) {
               <span>{m.viewer.viewFullSoulMd}</span>
             </>
           )}
-        </PixelButton>
+        </TerminalButton>
       )}
-    </PixelCard>
+    </TerminalCard>
   );
 }

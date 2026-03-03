@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
-import { PixelInput } from "@/components/ui/pixel-input";
+import { TerminalInput } from "@/components/ui/terminal-input";
 import { cn } from "@/lib/utils/cn";
 import { useMessages } from "@/lib/i18n";
 
@@ -94,7 +94,7 @@ export function GalleryFilters() {
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
             <Search size={14} />
           </div>
-          <PixelInput
+          <TerminalInput
             placeholder={m.gallery.searchPlaceholder}
             defaultValue={currentSearch}
             onChange={handleSearchChange}
@@ -108,9 +108,9 @@ export function GalleryFilters() {
           className={cn(
             "px-3 py-2.5 font-pixel text-xs",
             "bg-card-bg text-text-primary",
-            "pixel-border-sm cursor-pointer",
+            "terminal-border-sm cursor-pointer",
             "outline-none transition-shadow duration-200",
-            "focus:pixel-border-accent focus:glow-purple"
+            "focus:terminal-border-accent focus:glow-purple"
           )}
         >
           {SORT_OPTIONS.map((opt) => (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { Copy, Check, MessageCircle } from "lucide-react";
 import { useMessages } from "@/lib/i18n";
 
@@ -49,7 +49,7 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
 
   return (
     <div className="flex flex-wrap gap-2 justify-center">
-      <PixelButton
+      <TerminalButton
         variant="ghost"
         size="sm"
         onClick={handleShareX}
@@ -58,9 +58,9 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
       >
         <XIcon />
         <span>X</span>
-      </PixelButton>
+      </TerminalButton>
 
-      <PixelButton
+      <TerminalButton
         variant="ghost"
         size="sm"
         onClick={handleShareKakao}
@@ -69,9 +69,9 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
       >
         <MessageCircle size={12} />
         <span>{m.shareButtons.kakao}</span>
-      </PixelButton>
+      </TerminalButton>
 
-      <PixelButton
+      <TerminalButton
         variant="ghost"
         size="sm"
         onClick={handleCopyUrl}
@@ -80,7 +80,7 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
       >
         {copied ? <Check size={12} /> : <Copy size={12} />}
         <span>{copied ? m.shareButtons.copied : m.shareButtons.copyUrl}</span>
-      </PixelButton>
+      </TerminalButton>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 import { useMessages } from "@/lib/i18n";
 
@@ -38,12 +38,12 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
     : lines.slice(0, COLLAPSE_LINE_LIMIT).join("\n") + "...";
 
   return (
-    <PixelCard className="space-y-3">
+    <TerminalCard className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="font-pixel text-sm text-accent-primary">
           {m.viewer.systemPromptTitle}
         </h2>
-        <PixelButton
+        <TerminalButton
           variant="ghost"
           size="sm"
           onClick={handleCopy}
@@ -60,11 +60,11 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
               <span>{m.viewer.copy}</span>
             </>
           )}
-        </PixelButton>
+        </TerminalButton>
       </div>
 
       <div className="relative">
-        <pre className="whitespace-pre-wrap break-words font-pixel-accent font-mono text-[11px] text-text-primary leading-relaxed bg-text-primary/5 p-4 pixel-border-sm overflow-hidden">
+        <pre className="whitespace-pre-wrap break-words font-pixel-accent font-mono text-[11px] text-text-primary leading-relaxed bg-text-primary/5 p-4 terminal-border-sm overflow-hidden">
           {displayText}
         </pre>
         {needsCollapse && !isExpanded && (
@@ -73,7 +73,7 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
       </div>
 
       {needsCollapse && (
-        <PixelButton
+        <TerminalButton
           variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -91,8 +91,8 @@ export function SystemPromptViewer({ systemPrompt }: SystemPromptViewerProps) {
               <span>{m.viewer.viewFullPrompt}</span>
             </>
           )}
-        </PixelButton>
+        </TerminalButton>
       )}
-    </PixelCard>
+    </TerminalCard>
   );
 }

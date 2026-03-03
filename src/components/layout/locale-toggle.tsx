@@ -20,7 +20,7 @@ export function LocaleToggle() {
     <button
       type="button"
       onClick={handleToggle}
-      className="font-pixel text-[9px] px-2 py-1 bg-card-bg pixel-border-sm text-text-secondary hover:text-text-primary hover:bg-accent-primary/10 transition-all duration-150 cursor-pointer select-none"
+      className="font-pixel text-[9px] px-2 py-1 bg-card-bg terminal-border-sm text-text-secondary hover:text-text-primary hover:bg-accent-primary/10 transition-all duration-150 cursor-pointer select-none"
       aria-label={locale === "en" ? "Switch to Korean" : "Switch to English"}
     >
       {locale === "en" ? "KO" : "EN"}

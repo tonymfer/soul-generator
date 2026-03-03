@@ -31,13 +31,13 @@ function MBTISelector({ selected, onSelect, className }: MBTISelectorProps) {
               onClick={() => onSelect(type.code)}
               className={cn(
                 "relative flex flex-col items-center gap-1 p-3 sm:p-4",
-                "bg-card-bg pixel-border-sm cursor-pointer",
+                "bg-card-bg terminal-border-sm cursor-pointer",
                 "transition-all duration-200 ease-out",
                 "hover:scale-[1.03] hover:brightness-105",
                 "active:scale-[0.98]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                 isSelected && [
-                  "pixel-border-accent",
+                  "terminal-border-accent",
                   "scale-[1.03]",
                   "animate-pulse-glow",
                   "bg-accent-primary/10",
@@ -63,12 +63,12 @@ function MBTISelector({ selected, onSelect, className }: MBTISelectorProps) {
         onClick={() => onSelect("")}
         className={cn(
           "w-full p-3 font-pixel text-[10px]",
-          "bg-card-bg pixel-border-sm cursor-pointer",
+          "bg-card-bg terminal-border-sm cursor-pointer",
           "text-text-secondary hover:text-text-primary",
           "transition-all duration-200",
           "hover:bg-accent-primary/5",
           selected === "" && [
-            "pixel-border-accent",
+            "terminal-border-accent",
             "text-accent-primary",
             "bg-accent-primary/10",
           ],

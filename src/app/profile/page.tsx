@@ -4,9 +4,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NavBar } from "@/components/layout/nav-bar";
 import { SoulCard } from "@/components/gallery/soul-card";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelBadge } from "@/components/ui/pixel-badge";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalBadge } from "@/components/ui/terminal-badge";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { messages } from "@/lib/i18n/messages";
 
@@ -67,7 +67,7 @@ export default async function MyProfilePage() {
   const joinDateStr = m.profile.formatJoinDate(date.getFullYear(), date.getMonth() + 1);
 
   return (
-    <div className="min-h-screen gradient-pastel">
+    <div className="min-h-screen">
       <NavBar showBack backHref="/" backLabel={m.common.home} />
 
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-8 animate-fade-in-up">
@@ -76,11 +76,11 @@ export default async function MyProfilePage() {
             <img
               src={profile.avatar_url}
               alt={displayName}
-              className="w-20 h-20 pixel-border"
+              className="w-20 h-20 terminal-border rounded-md"
               style={{ imageRendering: "pixelated" }}
             />
           ) : (
-            <div className="w-20 h-20 bg-accent-primary pixel-border flex items-center justify-center text-2xl text-white font-pixel">
+            <div className="w-20 h-20 bg-accent-primary terminal-border rounded-md flex items-center justify-center text-2xl text-white font-pixel">
               {displayName[0]?.toUpperCase() ?? "?"}
             </div>
           )}
@@ -98,19 +98,19 @@ export default async function MyProfilePage() {
           </p>
 
           <div className="flex gap-3">
-            <PixelBadge variant="purple">
+            <TerminalBadge variant="purple">
               {m.common.souls} {allSouls.length}{m.common.count}
-            </PixelBadge>
-            <PixelBadge variant="pink">
+            </TerminalBadge>
+            <TerminalBadge variant="pink">
               {m.common.likes} {totalLikes}
-            </PixelBadge>
+            </TerminalBadge>
           </div>
 
           <div className="flex gap-3 pt-2">
             <Link href={`/profile/${profile.username}`}>
-              <PixelButton variant="ghost" size="sm">
+              <TerminalButton variant="ghost" size="sm">
                 {m.profile.viewPublicProfile}
-              </PixelButton>
+              </TerminalButton>
             </Link>
           </div>
         </section>
@@ -123,9 +123,9 @@ export default async function MyProfilePage() {
               {m.profile.mySouls}
             </h2>
             <Link href="/create">
-              <PixelButton variant="primary" size="sm">
+              <TerminalButton variant="primary" size="sm">
                 {m.profile.createNew}
-              </PixelButton>
+              </TerminalButton>
             </Link>
           </div>
 
@@ -135,7 +135,7 @@ export default async function MyProfilePage() {
                 <div key={soul.slug} className="relative">
                   {!soul.is_public && (
                     <div className="absolute top-2 right-2 z-[1]">
-                      <PixelBadge variant="default">{m.common.private}</PixelBadge>
+                      <TerminalBadge variant="default">{m.common.private}</TerminalBadge>
                     </div>
                   )}
                   <SoulCard soul={soul} locale={locale} />
@@ -143,16 +143,16 @@ export default async function MyProfilePage() {
               ))}
             </div>
           ) : (
-            <PixelCard className="text-center py-12 space-y-4">
+            <TerminalCard className="text-center py-12 space-y-4">
               <p className="font-pixel text-sm text-text-secondary">
                 {m.profile.noSoulsYet}
               </p>
               <Link href="/create">
-                <PixelButton variant="primary" size="md">
+                <TerminalButton variant="primary" size="md">
                   {m.profile.createSoul} &rarr;
-                </PixelButton>
+                </TerminalButton>
               </Link>
-            </PixelCard>
+            </TerminalCard>
           )}
         </section>
       </main>

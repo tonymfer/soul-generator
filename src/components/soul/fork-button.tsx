@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { GitFork } from "lucide-react";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { useMessages } from "@/lib/i18n";
 
 // ============================================================
@@ -23,7 +23,7 @@ export function ForkButton({ soulSlug, forkCount }: ForkButtonProps) {
   };
 
   return (
-    <PixelButton
+    <TerminalButton
       variant="ghost"
       size="sm"
       onClick={handleFork}
@@ -31,6 +31,6 @@ export function ForkButton({ soulSlug, forkCount }: ForkButtonProps) {
     >
       <GitFork size={12} />
       <span>{m.fork.remix} {forkCount}</span>
-    </PixelButton>
+    </TerminalButton>
   );
 }

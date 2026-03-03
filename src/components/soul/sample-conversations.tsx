@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PixelCard } from "@/components/ui/pixel-card";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalCard } from "@/components/ui/terminal-card";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
 import { useMessages } from "@/lib/i18n";
 
@@ -28,7 +28,7 @@ function ChatBubble({ message }: { message: Message }) {
         className={`max-w-[80%] p-3 ${
           isUser
             ? "bg-text-primary/5 text-text-primary ml-8"
-            : "bg-accent-primary/10 text-text-primary pixel-border-sm mr-8"
+            : "bg-accent-primary/10 text-text-primary terminal-border-sm mr-8"
         }`}
       >
         <span className="block font-pixel text-[7px] uppercase mb-1 text-text-secondary">
@@ -55,7 +55,7 @@ function ConversationSection({
 
   return (
     <div className="space-y-2">
-      <PixelButton
+      <TerminalButton
         variant="ghost"
         size="sm"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -67,7 +67,7 @@ function ConversationSection({
           {label} {index + 1}
         </span>
         {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-      </PixelButton>
+      </TerminalButton>
 
       {isExpanded && (
         <div className="space-y-2 pl-2 animate-fade-in-up">
@@ -86,7 +86,7 @@ export function SampleConversations({ conversations }: SampleConversationsProps)
   if (!conversations || conversations.length === 0) return null;
 
   return (
-    <PixelCard className="space-y-4">
+    <TerminalCard className="space-y-4">
       <h2 className="font-pixel text-sm text-accent-primary">
         {m.conversations.title}
       </h2>
@@ -101,6 +101,6 @@ export function SampleConversations({ conversations }: SampleConversationsProps)
           />
         ))}
       </div>
-    </PixelCard>
+    </TerminalCard>
   );
 }

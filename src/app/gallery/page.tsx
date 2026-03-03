@@ -4,9 +4,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SoulCard } from "@/components/gallery/soul-card";
 import { GalleryFilters } from "@/components/gallery/gallery-filters";
-import { PixelButton } from "@/components/ui/pixel-button";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Sparkle } from "@/components/ui/sparkle";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { LocaleToggle } from "@/components/layout/locale-toggle";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { messages } from "@/lib/i18n/messages";
@@ -85,7 +83,7 @@ export default async function GalleryPage({ searchParams }: PageProps) {
   const totalPages = count ? Math.ceil(count / PAGE_SIZE) : 1;
 
   return (
-    <div className="min-h-screen gradient-pastel">
+    <div className="min-h-screen">
       <header className="sticky top-0 z-10 bg-bg-primary/80 backdrop-blur-sm border-b-2 border-card-border">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
@@ -105,7 +103,6 @@ export default async function GalleryPage({ searchParams }: PageProps) {
             <h1 className="font-pixel text-lg sm:text-xl text-text-primary">
               {m.gallery.title}
             </h1>
-            <Sparkle count={3} color="var(--accent-yellow)" />
           </div>
           <p className="font-pixel-accent text-xs text-text-secondary">
             {m.gallery.subtitle}
@@ -141,14 +138,14 @@ export default async function GalleryPage({ searchParams }: PageProps) {
           <section className="flex items-center justify-center gap-4">
             {page > 1 ? (
               <Link href={buildPaginationUrl(params, page - 1)}>
-                <PixelButton variant="ghost" size="sm">
+                <TerminalButton variant="ghost" size="sm">
                   &larr; {m.common.previous}
-                </PixelButton>
+                </TerminalButton>
               </Link>
             ) : (
-              <PixelButton variant="ghost" size="sm" disabled>
+              <TerminalButton variant="ghost" size="sm" disabled>
                 &larr; {m.common.previous}
-              </PixelButton>
+              </TerminalButton>
             )}
 
             <span className="font-pixel text-[10px] text-text-secondary">
@@ -157,14 +154,14 @@ export default async function GalleryPage({ searchParams }: PageProps) {
 
             {page < totalPages ? (
               <Link href={buildPaginationUrl(params, page + 1)}>
-                <PixelButton variant="ghost" size="sm">
+                <TerminalButton variant="ghost" size="sm">
                   {m.common.next} &rarr;
-                </PixelButton>
+                </TerminalButton>
               </Link>
             ) : (
-              <PixelButton variant="ghost" size="sm" disabled>
+              <TerminalButton variant="ghost" size="sm" disabled>
                 {m.common.next} &rarr;
-              </PixelButton>
+              </TerminalButton>
             )}
           </section>
         )}

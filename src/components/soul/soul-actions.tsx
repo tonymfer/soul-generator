@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { PixelButton } from "@/components/ui/pixel-button";
+import { TerminalButton } from "@/components/ui/terminal-button";
 import { Copy, Check, Share2 } from "lucide-react";
 import { LikeButton } from "./like-button";
 import { ForkButton } from "./fork-button";
@@ -73,7 +73,7 @@ export function SoulActions({
 
   return (
     <div className="flex flex-wrap gap-3 justify-center">
-      <PixelButton
+      <TerminalButton
         variant="primary"
         size="sm"
         onClick={() => copyToClipboard(systemPrompt, setPromptCopied)}
@@ -81,9 +81,9 @@ export function SoulActions({
       >
         {promptCopied ? <Check size={12} /> : <Copy size={12} />}
         <span>{promptCopied ? m.soulActions.copied : m.soulActions.copySystemPrompt}</span>
-      </PixelButton>
+      </TerminalButton>
 
-      <PixelButton
+      <TerminalButton
         variant="secondary"
         size="sm"
         onClick={() => copyToClipboard(soulMd, setSoulMdCopied)}
@@ -91,7 +91,7 @@ export function SoulActions({
       >
         {soulMdCopied ? <Check size={12} /> : <Copy size={12} />}
         <span>{soulMdCopied ? m.soulActions.copied : m.soulActions.copySoulMd}</span>
-      </PixelButton>
+      </TerminalButton>
 
       <ExportMenu soulId={soulId} title={title} />
 
@@ -106,7 +106,7 @@ export function SoulActions({
         forkCount={forksCount}
       />
 
-      <PixelButton
+      <TerminalButton
         variant="ghost"
         size="sm"
         onClick={handleShare}
@@ -114,7 +114,7 @@ export function SoulActions({
       >
         <Share2 size={12} />
         <span>{m.soulActions.share}</span>
-      </PixelButton>
+      </TerminalButton>
     </div>
   );
 }

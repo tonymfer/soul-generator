@@ -24,7 +24,7 @@ function QuizProgress({ currentPhase, className }: QuizProgressProps) {
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       {/* Progress bar track */}
-      <div className="relative w-full h-3 bg-card-bg pixel-border-sm overflow-hidden">
+      <div className="relative w-full h-3 bg-card-bg terminal-border-sm overflow-hidden">
         <div
           className="absolute inset-y-0 left-0 bg-accent-primary transition-all duration-500 ease-out"
           style={{
@@ -62,10 +62,10 @@ function QuizProgress({ currentPhase, className }: QuizProgressProps) {
                   "inline-flex items-center justify-center w-5 h-5",
                   "font-pixel text-[8px]",
                   "transition-all duration-200",
-                  isCompleted && "bg-accent-primary text-white pixel-border-sm",
+                  isCompleted && "bg-accent-primary text-white terminal-border-sm",
                   isCurrent &&
-                    "bg-accent-pink text-white pixel-border-sm animate-pulse-glow",
-                  !isCompleted && !isCurrent && "bg-card-bg text-text-secondary pixel-border-sm",
+                    "bg-accent-pink text-white terminal-border-sm animate-pulse-glow",
+                  !isCompleted && !isCurrent && "bg-card-bg text-text-secondary terminal-border-sm",
                 )}
               >
                 {isCompleted ? "\u2713" : phase}

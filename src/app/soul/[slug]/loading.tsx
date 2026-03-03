@@ -4,7 +4,7 @@
 
 export default function SoulDetailLoading() {
   return (
-    <div className="min-h-screen gradient-pastel">
+    <div className="min-h-screen">
       {/* Header skeleton */}
       <header className="sticky top-0 z-10 bg-bg-primary/80 backdrop-blur-sm border-b-2 border-card-border">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -27,7 +27,7 @@ export default function SoulDetailLoading() {
         </div>
 
         {/* Traits skeleton */}
-        <div className="p-6 bg-card-bg pixel-border space-y-4">
+        <div className="p-6 bg-card-bg terminal-border rounded-md space-y-4">
           <div className="w-24 h-4 shimmer-bg opacity-20 rounded" />
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="space-y-1">
@@ -38,7 +38,7 @@ export default function SoulDetailLoading() {
         </div>
 
         {/* Content skeleton */}
-        <div className="p-6 bg-card-bg pixel-border space-y-3">
+        <div className="p-6 bg-card-bg terminal-border rounded-md space-y-3">
           <div className="w-24 h-4 shimmer-bg opacity-20 rounded" />
           <div className="w-full h-2 shimmer-bg opacity-10 rounded" />
           <div className="w-3/4 h-2 shimmer-bg opacity-10 rounded" />
